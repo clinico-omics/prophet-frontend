@@ -1,0 +1,78 @@
+@text-color: #00adef;
+@background-color: #fff;
+
+.daily-detail {
+  display: flex;
+  margin: 35px auto;
+  flex-direction: column;
+  width: 80%;
+  min-height: 1000px;
+
+  .summary-container {
+    padding: 20px;
+    background-color: @background-color;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    border: 1px solid @text-color;
+
+    .left {
+      display: flex;
+      flex-direction: column;
+      margin: 10px 0px;
+    }
+
+    .right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .title {
+      font-size: 1.5rem;
+      color: @text-color;
+      text-align: justify;
+      font-weight: bold;
+    }
+
+    .detail {
+      display: flex;
+      margin: 10px 0px;
+      color: @text-color;
+
+      .editor {
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      .date {
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+
+    .summary {
+      display: flex;
+      text-align: justify;
+      color: @text-color;
+      font-size: 1.1rem;
+    }
+  }
+
+  .show-window {
+    margin: 35px auto;
+
+    .card-container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+}
