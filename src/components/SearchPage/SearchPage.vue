@@ -25,7 +25,12 @@
           <p class="slogan" v-html="news"></p>
         </el-row>
       </el-row>
-      <el-row class="card-container" :gutter="30" v-if="items.length > 0">
+      <el-row
+        class="card-container"
+        :gutter="30"
+        v-if="items.length > 0"
+        v-loading="loading"
+      >
         <el-col
           v-for="(card, index) in items"
           :key="index"
@@ -36,7 +41,7 @@
         >
           <card
             :card="card"
-            @click.native="showKnowledgeDetail(card.id)"
+            @click.native="showKnowledgeDetail(card.paper, card.id)"
           ></card>
         </el-col>
       </el-row>
@@ -61,10 +66,13 @@ export default {
     };
   },
   methods: {
-    showKnowledgeDetail: function(knowledgeId) {
+    showKnowledgeDetail: function(paperId, knowledgeId) {
       this.$router.push({
         name: "knowledge-detail",
-        params: { knowledgeId: knowledgeId }
+        params: {
+          knowledgeId: knowledgeId,
+          paperId: paperId
+        }
       });
     },
     ...mapActions("knowledges", ["getKnowledgeList"])
@@ -73,7 +81,7 @@ export default {
     Card
   },
   computed: {
-    ...mapState("knowledges", ["items", "selected", "loading", "total"])
+    ...mapState("knowledges", ["items", "loading"])
   },
   created() {
     this.getKnowledgeList({});

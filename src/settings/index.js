@@ -14,10 +14,10 @@ var config = {
       name: "Knowledge",
       route: "/knowledge"
     },
-    {
-      name: "Daily",
-      route: "/daily"
-    },
+    // {
+    //   name: "Daily",
+    //   route: "/daily"
+    // },
     {
       name: "Recommendataion",
       route: "/recommendation",

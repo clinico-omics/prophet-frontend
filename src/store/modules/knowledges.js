@@ -6,9 +6,10 @@ const knowledges = {
   state: () => ({
     items: [],
     selected: [],
-    loading: false,
+    loading: true,
     current: 0,
     total: 0,
+    knowledge: {},
     searchOptions: {
       limit: 10,
       offset: 0,
@@ -29,12 +30,15 @@ const knowledges = {
       }
     },
     currentKnowledge(state) {
-      return state.items[state.current];
+      return state.knowledge;
     }
   },
   mutations: {
     setCurrent(state, payload) {
       state.current = payload;
+    },
+    setKnowledge(state, payload) {
+      state.knowledge = payload;
     },
     setKnowledgeList(state, payload) {
       state.items = payload;
@@ -92,6 +96,19 @@ const knowledges = {
         })
         .finally(() => {
           commit("setLoading", false);
+        });
+    },
+    setCurrentKnowledge({ commit }, knowledgeId) {
+      return KnowledgeService.fetchKnowledgeById(knowledgeId)
+        .then(response => {
+          commit("setKnowledge", response.data);
+        })
+        .catch(error => {
+          Notification.error({
+            title: "Error",
+            message: error,
+            showClose: true
+          });
         });
     },
     updateKnowledge({ commit }, data) {

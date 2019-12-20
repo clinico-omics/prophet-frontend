@@ -1,7 +1,7 @@
+/* eslint-disable */
 import store from "../store";
 import filter from "lodash.filter";
 import { Notification } from "element-ui";
-import { Loading } from "element-ui";
 import { tokenIsExpired } from "@/utils/util";
 
 import Vue from "vue";
@@ -108,7 +108,7 @@ const router = new Router({
       meta: { auth: false }
     },
     {
-      path: "/knowledge/:knowledgeId",
+      path: "/knowledge/:paperId/:knowledgeId",
       name: "knowledge-detail",
       components: {
         contentMgmt: KnowledgeDetail
@@ -138,11 +138,11 @@ const router = new Router({
 });
 
 const whiteList = [
-  "^/$",
-  "^/auth$",
-  "^/knowledge[/]?.*$",
-  "^/daily[/]?.*$",
-  "^/about$"
+  '^[\/]+$',
+  '^[\/]+auth$',
+  '^[\/]+knowledge[/]?.*$',
+  '^[\/]+daily[/]?.*$',
+  '^[\/]+about$'
 ]; // no redirect whitelist
 
 function checkToken() {
@@ -159,12 +159,7 @@ function loadToken() {
   store.dispatch("auth/initAuth");
 }
 
-var loading = undefined;
-
 router.beforeEach((to, from, next) => {
-  // 全屏菊花
-  loading = Loading.service({ fullscreen: true });
-
   const matched = filter(whiteList, item => {
     // item as a regex pattern
     return to.path.match(item);
@@ -173,20 +168,14 @@ router.beforeEach((to, from, next) => {
   // Token will be not working When you refresh page.
   loadToken();
 
+  console.log("Matched: ", matched, to.path);
   if (matched.length > 0) {
     next();
   } else {
     const tokenIsValid = checkToken();
 
     if (tokenIsValid) {
-      const redirect = decodeURIComponent(from.query.redirect || to.path);
-      if (to.path === redirect) {
-        // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
-        next({ ...to, replace: true });
-      } else {
-        // 跳转到目的路由
-        next({ path: redirect });
-      }
+      next();
     } else {
       Notification.error({
         title: "Unauthorized",
@@ -197,15 +186,8 @@ router.beforeEach((to, from, next) => {
       store.dispatch("auth/logout");
 
       next({ path: "/", query: { redirect: to.fullPath } });
-      loading.close();
     }
   }
-});
-
-router.afterEach(() => {
-  setTimeout(() => {
-    loading.close();
-  }, 100);
 });
 
 export default router;

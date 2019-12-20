@@ -9,6 +9,7 @@ const papers = {
     loading: false,
     current: 0,
     total: 0,
+    paper: {},
     searchOptions: {
       limit: 10,
       offset: 0,
@@ -29,12 +30,15 @@ const papers = {
       }
     },
     currentPaper(state) {
-      return state.items[state.current];
+      return state.paper;
     }
   },
   mutations: {
     setCurrent(state, payload) {
       state.current = payload;
+    },
+    setPaper(state, payload) {
+      state.paper = payload;
     },
     setPaperList(state, payload) {
       state.items = payload;
@@ -92,6 +96,19 @@ const papers = {
         })
         .finally(() => {
           commit("setLoading", false);
+        });
+    },
+    setCurrentPaper({ commit }, paperId) {
+      return PaperService.fetchPaperById(paperId)
+        .then(response => {
+          commit("setPaper", response.data);
+        })
+        .catch(error => {
+          Notification.error({
+            title: "Error",
+            message: error,
+            showClose: true
+          });
         });
     },
     updatePaper({ commit }, data) {
