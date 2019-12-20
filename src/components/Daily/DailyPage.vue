@@ -58,27 +58,7 @@ export default {
     showDailyDetail: function(dailyId) {
       this.$router.push({ name: "daily-detail", params: { dailyId: dailyId } });
     },
-    getDailys(lang) {
-      if (this.mode == "dev") {
-        var that = this;
-        this.$models.dev.getDailys(lang, function(data) {
-          console.log("DailyDetail-created", that, data);
-          if (data) {
-            that.dailys = data;
-          } else {
-            that.$notify({
-              title: "警告",
-              message: "未找到目标Daily列表，返回上一级",
-              type: "warning"
-            });
-
-            that.$router.push({ name: "root" });
-          }
-        });
-      } else if (this.mode === "production") {
-        console.log("Production Mode.");
-      }
-    }
+    getDailys() {}
   },
   components: {
     Card

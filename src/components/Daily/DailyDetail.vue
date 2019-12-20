@@ -55,27 +55,7 @@ export default {
         params: { knowledgeId: knowledgeId }
       });
     },
-    getDailyById(dailyId) {
-      if (this.mode === "dev") {
-        var that = this;
-        this.$models.dev.getDailyById(dailyId, function(record) {
-          console.log("DailyDetail-created", that, record);
-          if (record) {
-            that.daily = record;
-          } else {
-            that.$notify({
-              title: "警告",
-              message: "未找到目标Daily，返回上一级",
-              type: "warning"
-            });
-
-            that.$router.push({ name: "daily" });
-          }
-        });
-      } else if (this.mode === "production") {
-        console.log("Production Mode.");
-      }
-    }
+    getDailyById() {}
   },
   computed: {
     mode: function() {
