@@ -9,9 +9,7 @@
     </prophet-header>
     <sidebar v-if="sidebarActive" :headerContent="headerContent"></sidebar>
     <el-row class="prophet">
-      <transition v-on:before-enter="beforeEnter" v-on:after-enter="afterEnter">
-        <router-view name="contentMgmt"></router-view>
-      </transition>
+      <router-view name="contentMgmt"></router-view>
     </el-row>
     <prophet-footer></prophet-footer>
   </div>
@@ -30,20 +28,7 @@ export default {
       loading: null
     };
   },
-  methods: {
-    beforeEnter: function() {
-      // 全屏菊花
-      this.loading = this.$loading({
-        lock: true,
-        text: "Loading..."
-      });
-    },
-    afterEnter: function() {
-      setTimeout(() => {
-        this.loading.close();
-      }, 800);
-    }
-  },
+  methods: {},
   components: {
     Sidebar,
     ProphetHeader,
@@ -70,6 +55,6 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 @import "../assets/css/prophet.less";
 </style>

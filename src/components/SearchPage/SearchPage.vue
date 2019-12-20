@@ -25,9 +25,9 @@
           <p class="slogan" v-html="news"></p>
         </el-row>
       </el-row>
-      <el-row class="card-container" :gutter="30" v-if="knowledges.length > 0">
+      <el-row class="card-container" :gutter="30" v-if="items.length > 0">
         <el-col
-          v-for="(card, index) in knowledges"
+          v-for="(card, index) in items"
           :key="index"
           :xs="24"
           :sm="12"
@@ -36,15 +36,19 @@
         >
           <card
             :card="card"
-            @click.native="showKnowledgeDetail(card.knowledgeId)"
+            @click.native="showKnowledgeDetail(card.id)"
           ></card>
         </el-col>
+      </el-row>
+      <el-row class="not-found" v-else>
+        <span>No any knowledges.</span>
       </el-row>
     </el-row>
   </el-row>
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
 import Card from "../Common/Card";
 
 export default {
@@ -53,8 +57,7 @@ export default {
   data() {
     return {
       queryString: "",
-      news: '<a href="http://www.nordata.cn">智汇医圈开启知识新模式</a>',
-      knowledges: []
+      news: "<a href='http://datains.3steps.cn'>智汇医圈开启知识新模式</a>"
     };
   },
   methods: {
@@ -64,14 +67,16 @@ export default {
         params: { knowledgeId: knowledgeId }
       });
     },
-    getKnowledges() {}
+    ...mapActions("knowledges", ["getKnowledgeList"])
   },
   components: {
     Card
   },
-  computed: {},
+  computed: {
+    ...mapState("knowledges", ["items", "selected", "loading", "total"])
+  },
   created() {
-    this.getKnowledges();
+    this.getKnowledgeList({});
   }
 };
 </script>

@@ -55,19 +55,17 @@ var config = {
           role: "editor",
           client: "pc"
         }
-      ]
+      ],
+      auth: true
     },
     {
       name: "Annotation",
-      route: "/annotation"
+      route: "/annotation",
+      auth: true
     },
     {
       name: "About",
       route: "/about"
-    },
-    {
-      name: "SIGN IN",
-      route: "/auth"
     }
   ],
   footerContent: [

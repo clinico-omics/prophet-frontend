@@ -28,7 +28,7 @@
               :key="index"
             >
               <el-menu-item :index="item.route" v-if="item.route">
-                {{ item.name }}
+                <span>{{ item.name }}</span>
               </el-menu-item>
               <el-submenu :index="index.toString()" v-if="item.children">
                 <template slot="title">{{ item.name }}</template>
@@ -41,6 +41,18 @@
                 </el-menu-item>
               </el-submenu>
             </el-row>
+            <el-row class="item-container">
+              <el-menu-item
+                index="/auth"
+                v-if="!isAuthenticated"
+                class="auth-btn"
+              >
+                <el-tag effect="plain">SIGN IN</el-tag>
+              </el-menu-item>
+              <el-menu-item @click.native="signout" v-else>
+                <el-tag effect="plain">SIGN OUT</el-tag>
+              </el-menu-item>
+            </el-row>
           </el-menu>
         </el-row>
       </el-col>
@@ -49,6 +61,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 import filter from "lodash.filter";
 
 export default {
@@ -84,18 +97,27 @@ export default {
       return filter(children, item => {
         return item.route && item.show !== false;
       });
+    },
+    ...mapActions("auth", ["logout"]),
+    signout() {
+      this.logout();
+      this.$router.push("/");
     }
   },
   computed: {
     getClientWidth: function() {
-      console.log(this.$store.state.getClientWidth());
       return this.$store.state.getClientWidth;
     },
     filteredHeaderContent: function() {
       return filter(this.headerContent, item => {
-        return item.show !== false;
+        if (this.isAuthenticated) {
+          return item.show !== false;
+        } else {
+          return item.show !== false && item.auth !== true;
+        }
       });
-    }
+    },
+    ...mapGetters("auth", ["isAuthenticated"])
   },
   components: {},
   activated() {},

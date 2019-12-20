@@ -26,3 +26,51 @@
   border-radius: 50px;
   z-index: 100;
 }
+
+.header {
+  .el-menu-item a {
+    cursor: pointer;
+    text-decoration: none;
+  }
+}
+
+.el-card__header,
+.el-card__body {
+  margin: unset;
+  padding: unset;
+}
+
+.el-button--text {
+  color: unset;
+}
+
+.search-container, .daily-container {
+  .el-input__inner {
+    height: 50px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+  }
+
+  .el-input-group__append {
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+  }
+}
+
+.el-menu-item,
+.el-submenu__title {
+  font-size: 1.3rem;
+  height: 81px;
+  display: flex;
+  align-items: center;
+}
+
+.el-submenu__icon-arrow {
+  right: 0px;
+  position: relative;
+  top: 0%;
+  margin-top: 0px;
+  margin-left: 5px;
+}

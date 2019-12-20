@@ -11,29 +11,33 @@
         <el-col :span="12" class="left">
           <el-button type="text">{{ card.journal }}</el-button>
         </el-col>
-        <el-col :span="12" class="right"> IF: {{ card.impactFactor }} </el-col>
+        <el-col :span="12" class="right">
+          IF: {{ card.impactFactor || "Unknown" }}
+        </el-col>
       </el-row>
       <el-row :class="{ 'journal-title': journalMode, title: !journalMode }">
         {{ card.title }}
       </el-row>
     </el-row>
-    <el-row class="image" v-if="card.imageSrc">
-      <img :src="card.imageSrc" />
+    <el-row class="image" v-if="card.image_src">
+      <img :src="card.image_src" />
     </el-row>
     <el-row class="content">
       {{ card.content }}
     </el-row>
     <el-row class="tag-container">
-      <span v-for="tag in card.tags" :key="tag">{{ tag }}</span>
+      <span v-for="tag in tags" :key="tag">{{ tag }}</span>
     </el-row>
     <el-row class="detail">
-      <el-col :span="12" class="left">{{ card.author || card.editor }}</el-col>
-      <el-col :span="12" class="right">{{ card.date }}</el-col>
+      <el-col :span="12" class="left">{{ card.owner || card.editor }}</el-col>
+      <el-col :span="12" class="right">{{ createdDate }}</el-col>
     </el-row>
   </el-card>
 </template>
 
 <script>
+import sortedUniq from "lodash.sorteduniq";
+
 export default {
   name: "Card",
   props: {
@@ -43,6 +47,15 @@ export default {
     journalMode: {
       required: false,
       default: true
+    }
+  },
+  computed: {
+    tags: function() {
+      return sortedUniq(this.card.tags.split(","));
+    },
+    createdDate: function() {
+      // 2019-12-20T05:15:28.400124Z --> 2019-12-20
+      return this.card.created_at.slice(0, 10);
     }
   }
 };

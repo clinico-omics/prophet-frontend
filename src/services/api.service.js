@@ -3,12 +3,14 @@ import axios from "axios";
 class ApiService {
   constructor() {
     this.instance = axios.create({
-      baseURL: process.env.baseUrl
+      baseURL: process.env.VUE_APP_API_BASE_URL
     });
   }
 
   setHeader(token) {
-    this.instance.defaults.headers.common.Authorization = `Token ${token}`;
+    if (token) {
+      this.instance.defaults.headers.common.Authorization = `Token ${token}`;
+    }
   }
 
   removeHeader() {

@@ -2,12 +2,12 @@
   <el-row class="control-panel">
     <el-col class="project-btn-group" :span="12">
       <el-button-group style="margin-right: 30px;">
-        <el-button type="primary" size="small">Project List</el-button>
-        <el-button type="primary" size="small">Add Project</el-button>
+        <el-button type="primary" size="medium">Project List</el-button>
+        <el-button type="primary" size="medium">Add Project</el-button>
       </el-button-group>
-      <el-tag effect="plain">
-        <a href="/">ProjectName: {{ projectName }}</a>
-      </el-tag>
+      <el-link type="success" style="font-size: 16px;" href="/">
+        ProjectName: {{ projectName }}
+      </el-link>
     </el-col>
     <el-col class="anno-btn-group" :span="12" v-if="projectActive">
       <el-tooltip class="item" content="Add Paper" placement="top">
