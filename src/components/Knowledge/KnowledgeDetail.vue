@@ -60,9 +60,9 @@
             >
               <el-option
                 v-for="item in knowledgeVersions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                :key="item"
+                :label="item"
+                :value="item"
               >
               </el-option>
             </el-select>
@@ -127,13 +127,7 @@
         </el-row>
       </el-col>
       <el-col class="detail" :xs="24" :sm="24" :md="24" :lg="9">
-        <!-- Comment -->
-        <el-row class="title">UserComment</el-row>
-        <section
-          id="isso-thread"
-          ref="isso"
-          :data-title="currentKnowledge.knowledgeId"
-        ></section>
+        <el-row class="title">Recommendation</el-row>
       </el-col>
     </el-row>
     <el-row class="data-visulization" v-if="notShow">
@@ -149,6 +143,7 @@
 
 <script>
 import sortedUniq from "lodash.sorteduniq";
+import map from "lodash.map";
 import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
@@ -165,22 +160,16 @@ export default {
       const source = "https://sci-hub.tw/" + doi;
       window.open(source, "_blank");
     },
-    ...mapActions("knowledges", ["setCurrentKnowledge"]),
-    ...mapActions("papers", ["setCurrentPaper"])
+    ...mapActions("papers", ["setCurrentPaper"]),
+    ...mapActions("knowledges", ["getKnowledgeList"])
   },
   mounted() {},
   computed: {
     knowledgeVersions: function() {
-      if (this.currentKnowledge.version) {
-        return [
-          {
-            label: this.currentKnowledge.version,
-            value: this.currentKnowledge.version
-          }
-        ];
-      } else {
-        return [];
-      }
+      return map(this.items, item => {
+        const language = item.language.toLowerCase();
+        return item.pmid + " - " + item.owner + " - " + language;
+      });
     },
     Knowledge: function() {
       const content = this.currentKnowledge.content;
@@ -211,15 +200,17 @@ export default {
         return ["Unknown"];
       }
     },
-    ...mapGetters("knowledges", ["currentKnowledge"]),
     ...mapGetters("papers", ["currentPaper"]),
-    ...mapState("papers", ["loading"])
+    ...mapGetters("knowledges", ["currentKnowledge"]),
+    ...mapState("papers", ["loading"]),
+    ...mapState("knowledges", ["items", "loading"])
   },
   watch: {},
   components: {},
   created() {
-    this.setCurrentKnowledge(this.$route.params.knowledgeId);
-    this.setCurrentPaper(this.$route.params.paperId);
+    const paperId = this.$route.params.paperId;
+    this.setCurrentPaper(paperId);
+    this.getKnowledgeList({ paper: paperId });
   }
 };
 </script>

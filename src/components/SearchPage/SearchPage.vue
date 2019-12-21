@@ -41,7 +41,7 @@
         >
           <card
             :card="card"
-            @click.native="showKnowledgeDetail(card.paper, card.id)"
+            @click.native="showKnowledgeDetail(card.paper)"
           ></card>
         </el-col>
       </el-row>
@@ -66,11 +66,10 @@ export default {
     };
   },
   methods: {
-    showKnowledgeDetail: function(paperId, knowledgeId) {
+    showKnowledgeDetail: function(paperId) {
       this.$router.push({
         name: "knowledge-detail",
         params: {
-          knowledgeId: knowledgeId,
           paperId: paperId
         }
       });

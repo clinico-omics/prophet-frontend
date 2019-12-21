@@ -49,10 +49,10 @@ export default {
     };
   },
   methods: {
-    showKnowledgeDetail: function(knowledgeId) {
+    showKnowledgeDetail: function(paperId) {
       this.$router.push({
         name: "knowledge-detail",
-        params: { knowledgeId: knowledgeId }
+        params: { paperId: paperId }
       });
     },
     getDailyById() {}

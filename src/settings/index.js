@@ -24,7 +24,7 @@ var config = {
       show: false
     },
     {
-      name: "Paper&Knowledge",
+      name: "Paper & Knowledge",
       children: [
         {
           name: "My Paper",

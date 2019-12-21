@@ -49,7 +49,7 @@
               >
                 <el-tag effect="plain">SIGN IN</el-tag>
               </el-menu-item>
-              <el-menu-item @click.native="signout" v-else>
+              <el-menu-item @click.native="signout" v-else class="auth-btn">
                 <el-tag effect="plain">SIGN OUT</el-tag>
               </el-menu-item>
             </el-row>

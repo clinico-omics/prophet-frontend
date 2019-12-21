@@ -3,47 +3,15 @@
     <el-row class="paper-table" v-if="mobileActive">
       Not Support Mobile Phone, Please Access on PC
     </el-row>
-    <el-row class="paper-table" v-if="papers.length > 0 && !mobileActive">
-      <el-table :data="papers" stripe highlight-current-row style="width: 100%">
+    <el-row class="paper-table" v-if="items.length > 0 && !mobileActive">
+      <el-table :data="items" stripe highlight-current-row style="width: 100%">
         <el-table-column type="expand" fixed>
           <template slot-scope="props">
-            <el-row v-html="props.row.paperAbstract" class="abstract"></el-row>
+            <el-row v-html="props.row.abstract" class="abstract"></el-row>
             <el-row class="author-container">
-              {{ props.row.paperAuthors }}
+              {{ props.row.authors }}
             </el-row>
           </template>
-        </el-table-column>
-        <el-table-column
-          type="index"
-          width="20"
-          align="center"
-          header-align="center"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="status"
-          label="Status"
-          sortable
-          width="105"
-          :filters="filters"
-          align="center"
-          header-align="center"
-          :filter-method="filterStatus"
-        >
-          <template slot-scope="scope">
-            <el-tag :type="getType(scope.row.status)" disable-transitions>
-              {{ getStatus(scope.row.status) }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="paperTitle"
-          label="PaperTile"
-          min-width="500"
-          align="left"
-          header-align="center"
-          sortable
-        >
         </el-table-column>
         <el-table-column
           prop="journal"
@@ -55,8 +23,17 @@
         >
         </el-table-column>
         <el-table-column
-          prop="impactFactor"
-          label="ImpactFactor"
+          prop="title"
+          label="PaperTile"
+          min-width="500"
+          align="left"
+          header-align="center"
+          sortable
+        >
+        </el-table-column>
+        <el-table-column
+          prop="published_date"
+          label="Published Date"
           width="150"
           align="center"
           header-align="center"
@@ -64,16 +41,7 @@
         >
         </el-table-column>
         <el-table-column
-          prop="publishedDate"
-          label="ImpactFactor"
-          width="150"
-          align="center"
-          header-align="center"
-          sortable
-        >
-        </el-table-column>
-        <el-table-column
-          prop="paperPMID"
+          prop="pmid"
           label="PMID"
           width="120"
           align="center"
@@ -82,7 +50,7 @@
         >
         </el-table-column>
         <el-table-column
-          prop="paperDOI"
+          prop="doi"
           label="DOI"
           width="180"
           align="center"
@@ -98,14 +66,14 @@
         >
           <template slot-scope="scope">
             <el-button
-              @click.native="downloadPaper(scope.row.source)"
+              @click.native="downloadPaper(scope.row.doi)"
               type="primary"
               size="small"
             >
               FullPaper
             </el-button>
             <el-button
-              @click.native="sumbitKnowledge(scope.row.paperPMID)"
+              @click.native="sumbitKnowledge(scope.row.pmid)"
               type="success"
               size="small"
             >
@@ -129,30 +97,22 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
+
 export default {
   name: "PaperTable",
   data() {
     return {
       currentPage: 1,
       total: null,
-      mobileActive: false,
-      papers: [],
-      filters: [
-        {
-          text: this.getStatus("unclaimed"),
-          value: "unclaimed"
-        },
-        {
-          text: this.getStatus("claimed"),
-          value: "claimed"
-        }
-      ]
+      mobileActive: false
     };
   },
   methods: {
     handleSizeChange: function() {},
     handleCurrentChange: function() {},
-    downloadPaper: function(source) {
+    downloadPaper: function(doi) {
+      const source = "https://sci-hub.tw/" + doi;
       window.open(source, "_blank");
     },
     sumbitKnowledge: function(paperPMID) {
@@ -161,32 +121,13 @@ export default {
         query: { paperPMID: paperPMID }
       });
     },
-    filterStatus: function(value, row) {
-      return row.status === value;
-    },
-    getStatus: function(status) {
-      if (status === "unclaimed") {
-        return "Unclaimed";
-      } else if (status === "claimed") {
-        return "Claimed";
-      }
-    },
-    getType: function(status) {
-      if (status === "unclaimed") {
-        return "danger";
-      } else if (status === "claimed") {
-        return "success";
-      }
-    },
-    getPapers() {}
+    ...mapActions("papers", ["getPaperList"])
   },
   computed: {
     isMobile: function() {
       return this.$store.state.isMobile;
     },
-    mode: function() {
-      return this.$store.state.mode;
-    }
+    ...mapState("papers", ["items", "loading"])
   },
   created() {
     if (this.isMobile()) {
@@ -194,7 +135,7 @@ export default {
     } else {
       this.mobileActive = false;
     }
-    this.getPapers();
+    this.getPaperList({});
   }
 };
 </script>

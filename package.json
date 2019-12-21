@@ -17,6 +17,7 @@
     "element-ui": "^2.13.0",
     "js-cookie": "^2.2.1",
     "lodash.filter": "^4.6.0",
+    "lodash.map": "^4.6.0",
     "lodash.sorteduniq": "^4.2.0",
     "papaparse": "^5.1.1",
     "register-service-worker": "^1.6.2",

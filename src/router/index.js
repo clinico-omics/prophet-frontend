@@ -108,7 +108,7 @@ const router = new Router({
       meta: { auth: false }
     },
     {
-      path: "/knowledge/:paperId/:knowledgeId",
+      path: "/knowledge/:paperId",
       name: "knowledge-detail",
       components: {
         contentMgmt: KnowledgeDetail

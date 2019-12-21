@@ -3,22 +3,17 @@
     <el-row class="knowledge-table" v-if="mobileActive">
       Not Support Mobile Phone, Please Access on PC
     </el-row>
-    <el-row
-      class="knowledge-table"
-      v-if="knowledges.length > 0 && !mobileActive"
-    >
-      <el-table
-        :data="knowledges"
-        stripe
-        highlight-current-row
-        style="width: 100%"
-      >
-        <el-table-column type="expand">
+    <el-row class="knowledge-table" v-if="items.length > 0 && !mobileActive">
+      <el-table :data="items" stripe highlight-current-row style="width: 100%">
+        <el-table-column type="expand" fixed>
           <template slot-scope="props">
-            <el-row v-html="convertContent(props.row.content)"></el-row>
+            <el-row
+              v-html="convertContent(props.row.content)"
+              class="abstract"
+            ></el-row>
             <el-row class="tags-container">
               <el-tag
-                v-for="(tag, index) in props.row.tags"
+                v-for="(tag, index) in convertTags(props.row.tags)"
                 type="info"
                 :key="index"
               >
@@ -44,8 +39,17 @@
           </template>
         </el-table-column>
         <el-table-column
+          prop="liked_num"
+          label="Liked Num"
+          min-width="150"
+          align="center"
+          header-align="center"
+          sortable
+        >
+        </el-table-column>
+        <el-table-column
           prop="title"
-          label="KnowledgeTitle"
+          label="Knowledge Title"
           min-width="500"
           align="left"
           header-align="center"
@@ -62,27 +66,18 @@
         >
         </el-table-column>
         <el-table-column
-          prop="impactFactor"
-          label="ImpactFactor"
-          width="150"
+          prop="created_at"
+          label="Created Time"
+          width="250"
           align="center"
           header-align="center"
           sortable
         >
         </el-table-column>
         <el-table-column
-          prop="date"
-          label="Date"
-          width="100"
-          align="center"
-          header-align="center"
-          sortable
-        >
-        </el-table-column>
-        <el-table-column
-          prop="author"
-          label="Autor"
-          min-width="250"
+          prop="owner"
+          label="Author"
+          min-width="150"
           align="center"
           header-align="center"
           sortable
@@ -106,18 +101,18 @@
         >
           <template slot-scope="scope">
             <el-button
-              @click.native="downloadPaper(scope.row.source)"
-              type="primary"
-              size="small"
-            >
-              GetPaper
-            </el-button>
-            <el-button
-              @click.native="checkKnowledge(scope.row.knowledgeId)"
+              @click.native="showKnowledge(scope.row.paper)"
               type="success"
               size="small"
             >
               Check
+            </el-button>
+            <el-button
+              @click.native="downloadPaper(scope.row.doi)"
+              type="success"
+              size="small"
+            >
+              Download
             </el-button>
           </template>
         </el-table-column>
@@ -137,6 +132,9 @@
 </template>
 
 <script>
+import sortedUniq from "lodash.sorteduniq";
+import { mapActions, mapState } from "vuex";
+
 export default {
   name: "PaperTable",
   data() {
@@ -144,15 +142,14 @@ export default {
       currentPage: 1,
       total: null,
       mobileActive: false,
-      knowledges: [],
       filters: [
         {
-          text: this.getStatus("unchecked"),
-          value: "unchecked"
+          text: this.getStatus("Submitted"),
+          value: "Submitted"
         },
         {
-          text: this.getStatus("checked"),
-          value: "checked"
+          text: this.getStatus("Checked"),
+          value: "Checked"
         }
       ]
     };
@@ -163,41 +160,42 @@ export default {
     downloadPaper: function(source) {
       window.open(source, "_blank");
     },
-    checkKnowledge: function(knowledgeId) {
-      console.log(knowledgeId);
+    convertTags: function(tags) {
+      return sortedUniq(tags.split(","));
+    },
+    showKnowledge: function(pmid) {
+      this.$router.push({
+        name: "knowledge-detail",
+        params: { paperId: pmid }
+      });
     },
     filterStatus: function(value, row) {
       return row.status === value;
     },
     getStatus: function(status) {
-      if (status === "unchecked") {
-        return "Unchecked";
-      } else if (status === "checked") {
+      if (status === "Submitted") {
+        return "Submitted";
+      } else if (status === "Checked") {
         return "Checked";
       }
     },
     getType: function(status) {
-      if (status === "unchecked") {
-        return "danger";
-      } else if (status === "checked") {
+      if (status === "Submitted") {
+        return "warning";
+      } else if (status === "Checked") {
         return "success";
       }
     },
-    getKnowledges(lang) {
-      console.log(lang);
-    },
     convertContent(content) {
-      console.log(
-        "knowledgeTable-convertContent",
-        content.replace(/([②③④⑤⑥⑦⑧⑨⑩])/g, "<br/><br/>$1")
-      );
       return content.replace(/([②③④⑤⑥⑦⑧⑨⑩])/g, "<br/><br/>$1");
-    }
+    },
+    ...mapActions("knowledges", ["getKnowledgeList"])
   },
   computed: {
     isMobile: function() {
       return this.$store.state.isMobile;
-    }
+    },
+    ...mapState("knowledges", ["items", "loading"])
   },
   created() {
     if (this.isMobile()) {
@@ -205,7 +203,7 @@ export default {
     } else {
       this.mobileActive = false;
     }
-    this.getKnowledges();
+    this.getKnowledgeList({});
   }
 };
 </script>
