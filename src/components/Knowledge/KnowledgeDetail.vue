@@ -7,17 +7,18 @@
       <el-col class="button-group" :xs="24" :sm="24" :md="10" :lg="5">
         <el-tooltip
           class="item"
-          content="Sync to Annotation Tool."
+          content="Sync to Annotation Tool"
           placement="top"
         >
           <el-button
             icon="el-icon-upload"
             circle
+            disabled
             type="warning"
             @click.native="pushKnowledge(currentKnowledge)"
           ></el-button>
         </el-tooltip>
-        <el-tooltip class="item" content="Download Paper." placement="top">
+        <el-tooltip class="item" content="Download Paper" placement="top">
           <el-button
             icon="el-icon-download"
             circle
@@ -25,7 +26,7 @@
             @click.native="downloadPaper(currentPaper.doi)"
           ></el-button>
         </el-tooltip>
-        <el-tooltip class="item" content="Like the Paper." placement="top">
+        <el-tooltip class="item" content="Like the Paper" placement="top">
           <el-button
             round
             icon="el-icon-star-on"
@@ -54,15 +55,17 @@
         <el-row class="header" :gutter="10">
           <el-col :span="12">
             <el-select
+              filterable
               v-model="version"
               placeholder="Please Choose Other Version"
               no-data-text="No More Versions"
+              @change="selectKnowledge"
             >
               <el-option
-                v-for="item in knowledgeVersions"
+                v-for="(item, index) in knowledgeVersions"
                 :key="item"
                 :label="item"
-                :value="item"
+                :value="index"
               >
               </el-option>
             </el-select>
@@ -144,7 +147,7 @@
 <script>
 import sortedUniq from "lodash.sorteduniq";
 import map from "lodash.map";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
 
 export default {
   name: "KnowledgeDetail",
@@ -160,10 +163,22 @@ export default {
       const source = "https://sci-hub.tw/" + doi;
       window.open(source, "_blank");
     },
+    selectKnowledge: function(value) {
+      this.setLoading(true);
+      this.setCurrent(value);
+      setTimeout(() => {
+        this.setLoading(false);
+      }, 500);
+    },
     ...mapActions("papers", ["setCurrentPaper"]),
-    ...mapActions("knowledges", ["getKnowledgeList"])
+    ...mapActions("knowledges", ["getKnowledgeList"]),
+    ...mapMutations("knowledges", ["setCurrent", "setLoading"])
   },
-  mounted() {},
+  mounted() {
+    if (this.knowledgeVersions.length > 0) {
+      this.version = this.knowledgeVersions[0];
+    }
+  },
   computed: {
     knowledgeVersions: function() {
       return map(this.items, item => {
@@ -202,7 +217,6 @@ export default {
     },
     ...mapGetters("papers", ["currentPaper"]),
     ...mapGetters("knowledges", ["currentKnowledge"]),
-    ...mapState("papers", ["loading"]),
     ...mapState("knowledges", ["items", "loading"])
   },
   watch: {},

@@ -28,7 +28,7 @@ var config = {
       children: [
         {
           name: "My Paper",
-          route: "/papers/mypaper",
+          route: "/papers/paper-list",
           role: "contributor",
           client: "pc"
         },
@@ -51,12 +51,12 @@ var config = {
         },
         {
           name: "Knowledge List",
-          route: "/papers/knowledges",
+          route: "/papers/knowledge-list",
           role: "editor",
           client: "pc"
         }
       ],
-      auth: true
+      auth: false
     },
     {
       name: "Annotation",

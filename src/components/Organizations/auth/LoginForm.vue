@@ -43,7 +43,6 @@ export default {
   components: {
     BaseCard
   },
-
   props: {
     login: {
       type: Function,
@@ -80,7 +79,6 @@ export default {
       }
     };
   },
-
   methods: {
     validate(callback) {
       return this.$refs["ruleForm"].validate(valid => {

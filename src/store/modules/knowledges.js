@@ -1,5 +1,6 @@
 import KnowledgeService from "@/services/knowledge.service";
 import { Notification } from "element-ui";
+import orderBy from "lodash.orderby";
 
 const knowledges = {
   namespaced: true,
@@ -41,7 +42,7 @@ const knowledges = {
       state.current = payload;
     },
     setKnowledgeList(state, payload) {
-      state.items = payload;
+      state.items = orderBy(payload, "liked_num", "desc");
     },
     addKnowledge(state, knowledge) {
       state.items.unshift(knowledge);

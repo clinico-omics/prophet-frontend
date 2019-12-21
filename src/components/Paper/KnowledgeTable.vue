@@ -39,9 +39,27 @@
           </template>
         </el-table-column>
         <el-table-column
+          prop="owner"
+          label="Author"
+          min-width="90"
+          align="center"
+          header-align="center"
+          sortable
+        >
+        </el-table-column>
+        <el-table-column
+          prop="language"
+          label="Language"
+          min-width="120"
+          align="center"
+          header-align="center"
+          sortable
+        >
+        </el-table-column>
+        <el-table-column
           prop="liked_num"
           label="Liked Num"
-          min-width="150"
+          min-width="120"
           align="center"
           header-align="center"
           sortable
@@ -69,15 +87,6 @@
           prop="created_at"
           label="Created Time"
           width="250"
-          align="center"
-          header-align="center"
-          sortable
-        >
-        </el-table-column>
-        <el-table-column
-          prop="owner"
-          label="Author"
-          min-width="150"
           align="center"
           header-align="center"
           sortable

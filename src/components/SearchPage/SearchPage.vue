@@ -28,11 +28,11 @@
       <el-row
         class="card-container"
         :gutter="30"
-        v-if="items.length > 0"
+        v-if="knowledges.length > 0"
         v-loading="loading"
       >
         <el-col
-          v-for="(card, index) in items"
+          v-for="(card, index) in knowledges"
           :key="index"
           :xs="24"
           :sm="12"
@@ -55,6 +55,7 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import Card from "../Common/Card";
+import sortedUniqBy from "lodash.sorteduniqby";
 
 export default {
   name: "SearchPage",
@@ -80,6 +81,11 @@ export default {
     Card
   },
   computed: {
+    knowledges: function() {
+      return sortedUniqBy(this.items, item => {
+        return item.paper;
+      });
+    },
     ...mapState("knowledges", ["items", "loading"])
   },
   created() {

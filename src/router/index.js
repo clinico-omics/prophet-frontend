@@ -60,7 +60,7 @@ const router = new Router({
       meta: { auth: false }
     },
     {
-      path: "/papers/knowledges",
+      path: "/papers/knowledge-list",
       name: "paper-knowledges",
       components: {
         contentMgmt: KnowledgeTable
@@ -73,7 +73,7 @@ const router = new Router({
       meta: { auth: false }
     },
     {
-      path: "/papers/mypaper",
+      path: "/papers/paper-list",
       name: "papers",
       components: {
         contentMgmt: PaperTable
@@ -141,6 +141,8 @@ const whiteList = [
   '^[\/]+$',
   '^[\/]+auth$',
   '^[\/]+knowledge[/]?.*$',
+  '^[\/]+papers[/]?$',
+  '^[\/]+papers/.*-list$',
   '^[\/]+daily[/]?.*$',
   '^[\/]+about$'
 ]; // no redirect whitelist
@@ -185,7 +187,7 @@ router.beforeEach((to, from, next) => {
       // 过期清理
       store.dispatch("auth/logout");
 
-      next({ path: "/", query: { redirect: to.fullPath } });
+      next({ path: from.path, query: { redirect: to.fullPath } });
     }
   }
 });
