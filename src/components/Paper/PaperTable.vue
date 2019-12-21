@@ -3,8 +3,14 @@
     <el-row class="paper-table" v-if="mobileActive">
       Not Support Mobile Phone, Please Access on PC
     </el-row>
-    <el-row class="paper-table" v-if="items.length > 0 && !mobileActive">
-      <el-table :data="items" stripe highlight-current-row style="width: 100%">
+    <el-row class="paper-table" v-if="!mobileActive">
+      <el-table
+        :data="items"
+        stripe
+        highlight-current-row
+        style="width: 100%"
+        v-loading="loading"
+      >
         <el-table-column type="expand" fixed>
           <template slot-scope="props">
             <el-row v-html="props.row.abstract" class="abstract"></el-row>
@@ -12,6 +18,15 @@
               {{ props.row.authors }}
             </el-row>
           </template>
+        </el-table-column>
+        <el-table-column
+          prop="total_knowledges"
+          label="Knowledges"
+          width="150"
+          align="center"
+          header-align="center"
+          sortable
+        >
         </el-table-column>
         <el-table-column
           prop="journal"
@@ -70,14 +85,14 @@
               type="primary"
               size="small"
             >
-              FullPaper
+              Full Paper
             </el-button>
             <el-button
               @click.native="sumbitKnowledge(scope.row.pmid)"
               type="success"
               size="small"
             >
-              SubmitKnowledge
+              Submit Knowledge
             </el-button>
           </template>
         </el-table-column>
@@ -85,10 +100,10 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[10, 30, 50, 80, 100]"
-        :page-size="10"
-        layout="total, sizes, prev, pager, next, jumper"
+        :current-page.sync="currentPage"
+        :page-sizes="[1, 10, 30, 50, 80, 100]"
+        :page-size.sync="pageSize"
+        layout="total, sizes, prev, pager, next"
         :total="total"
       >
       </el-pagination>
@@ -97,20 +112,32 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapMutations } from "vuex";
 
 export default {
   name: "PaperTable",
   data() {
     return {
       currentPage: 1,
-      total: null,
+      pageSize: 10,
       mobileActive: false
     };
   },
   methods: {
-    handleSizeChange: function() {},
-    handleCurrentChange: function() {},
+    handleSizeChange: function() {
+      this.updateSearchOptions({
+        limit: this.limit,
+        offset: this.offset
+      });
+      this.getPaperList({});
+    },
+    handleCurrentChange: function() {
+      this.updateSearchOptions({
+        limit: this.limit,
+        offset: this.offset
+      });
+      this.getPaperList({});
+    },
     downloadPaper: function(doi) {
       const source = "https://sci-hub.tw/" + doi;
       window.open(source, "_blank");
@@ -121,13 +148,20 @@ export default {
         query: { paperPMID: paperPMID }
       });
     },
-    ...mapActions("papers", ["getPaperList"])
+    ...mapActions("papers", ["getPaperList"]),
+    ...mapMutations("papers", ["updateSearchOptions"])
   },
   computed: {
+    offset: function() {
+      return (this.currentPage - 1) * this.pageSize;
+    },
+    limit: function() {
+      return this.pageSize;
+    },
     isMobile: function() {
       return this.$store.state.isMobile;
     },
-    ...mapState("papers", ["items", "loading"])
+    ...mapState("papers", ["items", "loading", "total"])
   },
   created() {
     if (this.isMobile()) {

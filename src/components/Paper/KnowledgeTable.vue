@@ -3,8 +3,14 @@
     <el-row class="knowledge-table" v-if="mobileActive">
       Not Support Mobile Phone, Please Access on PC
     </el-row>
-    <el-row class="knowledge-table" v-if="items.length > 0 && !mobileActive">
-      <el-table :data="items" stripe highlight-current-row style="width: 100%">
+    <el-row class="knowledge-table" v-if="!mobileActive">
+      <el-table
+        :data="items"
+        stripe
+        highlight-current-row
+        style="width: 100%"
+        v-loading="loading"
+      >
         <el-table-column type="expand" fixed>
           <template slot-scope="props">
             <el-row
@@ -129,10 +135,10 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[10, 30, 50, 80, 100]"
-        :page-size="10"
-        layout="total, sizes, prev, pager, next, jumper"
+        :current-page.sync="currentPage"
+        :page-sizes="[1, 10, 30, 50, 80, 100]"
+        :page-size.sync="pageSize"
+        layout="total, sizes, prev, pager, next"
         :total="total"
       >
       </el-pagination>
@@ -142,14 +148,14 @@
 
 <script>
 import sortedUniq from "lodash.sorteduniq";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapMutations } from "vuex";
 
 export default {
   name: "PaperTable",
   data() {
     return {
       currentPage: 1,
-      total: null,
+      pageSize: 10,
       mobileActive: false,
       filters: [
         {
@@ -164,8 +170,20 @@ export default {
     };
   },
   methods: {
-    handleSizeChange: function() {},
-    handleCurrentChange: function() {},
+    handleSizeChange: function() {
+      this.updateSearchOptions({
+        limit: this.limit,
+        offset: this.offset
+      });
+      this.getKnowledgeList({});
+    },
+    handleCurrentChange: function() {
+      this.updateSearchOptions({
+        limit: this.limit,
+        offset: this.offset
+      });
+      this.getKnowledgeList({});
+    },
     downloadPaper: function(source) {
       window.open(source, "_blank");
     },
@@ -198,13 +216,20 @@ export default {
     convertContent(content) {
       return content.replace(/([②③④⑤⑥⑦⑧⑨⑩])/g, "<br/><br/>$1");
     },
-    ...mapActions("knowledges", ["getKnowledgeList"])
+    ...mapActions("knowledges", ["getKnowledgeList"]),
+    ...mapMutations("knowledges", ["updateSearchOptions"])
   },
   computed: {
+    offset: function() {
+      return (this.currentPage - 1) * this.pageSize;
+    },
+    limit: function() {
+      return this.pageSize;
+    },
     isMobile: function() {
       return this.$store.state.isMobile;
     },
-    ...mapState("knowledges", ["items", "loading"])
+    ...mapState("knowledges", ["items", "loading", "total"])
   },
   created() {
     if (this.isMobile()) {
