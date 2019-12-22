@@ -1,7 +1,7 @@
 @knowledge-editor-border-color: #dcdfe6;
 @summary-font-size: 1.1rem;
-@box-height: 300px;
-@summary-height: 300px;
+@box-height: 500px;
+@summary-height: 500px;
 @background-color: #fff;
 
 .knowledge-editor {
@@ -9,22 +9,20 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 35px auto;
+  margin: 15px auto;
 
-  .search-bar {
-    margin-bottom: 10px;
-
-    .el-input__inner {
-      height: 40px;
-      border-radius: 5px;
-      border-top-right-radius: 0px;
-      border-bottom-right-radius: 0px;
-      border: 1px solid @knowledge-editor-border-color;
+  .control-panel {
+    padding: 10px;
+    width: 100%;
+    display: flex;
+  
+    .project-btn-group {
+      margin: auto 0px;
     }
-
-    .el-input-group__append {
-      border-top-right-radius: 5px;
-      border-bottom-right-radius: 5px;
+  
+    .anno-btn-group {
+      display: flex;
+      justify-content: flex-end;
     }
   }
 
@@ -62,6 +60,7 @@
       }
 
       .info {
+        line-height: 150%;
         overflow: scroll;
         margin: 0px;
 
@@ -85,10 +84,8 @@
 
     .right {
       text-align: justify;
+      line-height: 200%;
       height: @box-height;
-
-      .el-row {
-      }
 
       .title {
         font-weight: bold;
@@ -102,80 +99,20 @@
     }
   }
 
-  .editor-container {
-    .editor {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      margin-top: 20px;
-
-      .content {
-        height: @box-height;
-
-        .el-input__inner {
-          margin-bottom: 10px;
-          height: 40px;
-          border-radius: 5px;
-          border: 1px solid @knowledge-editor-border-color;
-        }
-
-        .el-textarea {
-          height: calc(100% - 50px);
-
-          .el-textarea__inner {
-            height: 100%;
-            text-align: justify;
-          }
-        }
-      }
-
-      .separator {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        img {
-          height: 50px;
-          width: 50px;
-        }
-      }
-
-      .image {
-        display: flex;
-        border: 1px solid @knowledge-editor-border-color;
-        border-radius: 5px;
-        justify-content: center;
-        align-items: center;
-        font-size: 50px;
-        height: @box-height;
-
-        .avatar-uploader,
-        .el-upload {
-          background-color: @background-color;
-          width: 100%;
-          height: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        .avatar {
-          width: 100%;
-          height: 100%;
-        }
-      }
-    }
-
-    .button-group {
-      margin: 10px 0px;
-      display: flex;
-      justify-content: flex-end;
-    }
+  .knowledge-creator {
+    position: absolute;
+    top: 0px;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
   }
 
   .preview-container {
     position: absolute;
-    top: 30px;
+    top: 0px;
     right: 10px;
     left: 10px;
     background-color: @background-color;

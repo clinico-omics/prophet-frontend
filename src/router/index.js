@@ -47,15 +47,13 @@ const router = new Router({
       meta: { auth: false }
     },
     {
-      path: "/papers/knowledge-creator",
+      path: "/papers/knowledge-creator/:paperId",
       name: "knowledge-creator",
       components: {
         contentMgmt: KnowledgeEditor
       },
       props: {
-        contentMgmt: route => ({
-          paperPMID: route.query.paperPMID
-        })
+        contentMgmt: true
       },
       meta: { auth: false }
     },

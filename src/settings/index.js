@@ -14,10 +14,11 @@ var config = {
       name: "Knowledge",
       route: "/knowledge"
     },
-    // {
-    //   name: "Daily",
-    //   route: "/daily"
-    // },
+    {
+      name: "Daily",
+      route: "/daily",
+      show: false
+    },
     {
       name: "Recommendataion",
       route: "/recommendation",
@@ -27,33 +28,35 @@ var config = {
       name: "Paper & Knowledge",
       children: [
         {
-          name: "My Paper",
+          name: "Papers",
           route: "/papers/paper-list",
           role: "contributor",
+          client: "pc"
+        },
+        {
+          name: "Knowledges",
+          route: "/papers/knowledge-list",
+          role: "editor",
           client: "pc"
         },
         {
           name: "Submit Paper",
           route: "/papers/submitter",
           role: "contributor",
-          client: "pc"
+          client: "pc",
+          show: false
         },
         {
           name: "Create Knowledge",
           route: "/papers/knowledge-creator",
-          role: "contributor"
+          role: "contributor",
+          show: false
         },
         {
           name: "Create Daily",
           route: "/papers/daily",
           role: "editor",
           show: false
-        },
-        {
-          name: "Knowledge List",
-          route: "/papers/knowledge-list",
-          role: "editor",
-          client: "pc"
         }
       ],
       auth: false
@@ -61,6 +64,7 @@ var config = {
     {
       name: "Annotation",
       route: "/annotation",
+      show: false,
       auth: true
     },
     {

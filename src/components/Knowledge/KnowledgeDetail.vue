@@ -22,7 +22,7 @@
           <el-button
             icon="el-icon-download"
             circle
-            type="success"
+            type="primary"
             @click.native="downloadPaper(currentPaper.doi)"
           ></el-button>
         </el-tooltip>

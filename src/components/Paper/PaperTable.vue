@@ -4,6 +4,17 @@
       Not Support Mobile Phone, Please Access on PC
     </el-row>
     <el-row class="paper-table" v-if="!mobileActive">
+      <el-row class="search-bar">
+        <el-input
+          placeholder="Please Enter PMID/DOI/Title"
+          v-model="queryString"
+          clearable
+          class="input-with-select"
+          @change="onSearch"
+        >
+          <el-button slot="append" icon="el-icon-search"></el-button>
+        </el-input>
+      </el-row>
       <el-table
         :data="items"
         stripe
@@ -20,6 +31,15 @@
           </template>
         </el-table-column>
         <el-table-column
+          prop="title"
+          label="Paper Title"
+          min-width="500"
+          align="left"
+          header-align="center"
+          sortable
+        >
+        </el-table-column>
+        <el-table-column
           prop="total_knowledges"
           label="Knowledges"
           width="150"
@@ -33,15 +53,6 @@
           label="Journal"
           width="150"
           align="center"
-          header-align="center"
-          sortable
-        >
-        </el-table-column>
-        <el-table-column
-          prop="title"
-          label="PaperTile"
-          min-width="500"
-          align="left"
           header-align="center"
           sortable
         >
@@ -88,8 +99,8 @@
               Full Paper
             </el-button>
             <el-button
-              @click.native="sumbitKnowledge(scope.row.pmid)"
-              type="success"
+              @click.native="sumbitKnowledge(scope.row.id)"
+              type="primary"
               size="small"
             >
               Submit Knowledge
@@ -118,12 +129,21 @@ export default {
   name: "PaperTable",
   data() {
     return {
+      queryString: "",
       currentPage: 1,
       pageSize: 10,
       mobileActive: false
     };
   },
   methods: {
+    onSearch: function() {
+      this.updateSearchOptions({
+        limit: this.limit,
+        offset: this.offset,
+        q: this.queryString
+      });
+      this.getPaperList({});
+    },
     handleSizeChange: function() {
       this.updateSearchOptions({
         limit: this.limit,
@@ -142,10 +162,12 @@ export default {
       const source = "https://sci-hub.tw/" + doi;
       window.open(source, "_blank");
     },
-    sumbitKnowledge: function(paperPMID) {
+    sumbitKnowledge: function(paperId) {
       this.$router.push({
         name: "knowledge-creator",
-        query: { paperPMID: paperPMID }
+        params: {
+          paperId: paperId
+        }
       });
     },
     ...mapActions("papers", ["getPaperList"]),

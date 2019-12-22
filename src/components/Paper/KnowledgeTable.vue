@@ -4,6 +4,17 @@
       Not Support Mobile Phone, Please Access on PC
     </el-row>
     <el-row class="knowledge-table" v-if="!mobileActive">
+      <el-row class="search-bar">
+        <el-input
+          placeholder="Please Enter Knowledge Title"
+          v-model="queryString"
+          clearable
+          class="input-with-select"
+          @change="onSearch"
+        >
+          <el-button slot="append" icon="el-icon-search"></el-button>
+        </el-input>
+      </el-row>
       <el-table
         :data="items"
         stripe
@@ -27,6 +38,15 @@
               </el-tag>
             </el-row>
           </template>
+        </el-table-column>
+        <el-table-column
+          prop="title"
+          label="Knowledge Title"
+          min-width="500"
+          align="left"
+          header-align="left"
+          sortable
+        >
         </el-table-column>
         <el-table-column
           prop="status"
@@ -72,15 +92,6 @@
         >
         </el-table-column>
         <el-table-column
-          prop="title"
-          label="Knowledge Title"
-          min-width="500"
-          align="left"
-          header-align="center"
-          sortable
-        >
-        </el-table-column>
-        <el-table-column
           prop="journal"
           label="Journal"
           width="150"
@@ -116,18 +127,18 @@
         >
           <template slot-scope="scope">
             <el-button
-              @click.native="showKnowledge(scope.row.paper)"
-              type="success"
-              size="small"
-            >
-              Check
-            </el-button>
-            <el-button
               @click.native="downloadPaper(scope.row.doi)"
-              type="success"
+              type="primary"
               size="small"
             >
               Download
+            </el-button>
+            <el-button
+              @click.native="showKnowledge(scope.row.paper)"
+              type="primary"
+              size="small"
+            >
+              Details
             </el-button>
           </template>
         </el-table-column>
@@ -154,6 +165,7 @@ export default {
   name: "PaperTable",
   data() {
     return {
+      queryString: "",
       currentPage: 1,
       pageSize: 10,
       mobileActive: false,
@@ -170,6 +182,14 @@ export default {
     };
   },
   methods: {
+    onSearch: function() {
+      this.updateSearchOptions({
+        limit: this.limit,
+        offset: this.offset,
+        q: this.queryString
+      });
+      this.getKnowledgeList({});
+    },
     handleSizeChange: function() {
       this.updateSearchOptions({
         limit: this.limit,

@@ -2,7 +2,7 @@
   <el-row class="header">
     <nav class="navbar">
       <el-col :xs="9" :sm="8" :md="6" :lg="4">
-        <a :href="website.href" target="_blank" class="logo">
+        <a href="/" class="logo">
           <img :src="logoPath" />
         </a>
       </el-col>
