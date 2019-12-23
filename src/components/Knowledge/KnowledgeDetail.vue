@@ -94,7 +94,7 @@
         </el-row>
         <el-row class="item">
           <el-row class="title">Published Date</el-row>
-          <el-row>{{ currentPaper.published_date }}</el-row>
+          <el-row>{{ currentPaper.pubdate }}</el-row>
         </el-row>
         <el-row class="item">
           <el-row class="title">Created Date</el-row>
@@ -210,7 +210,7 @@ export default {
     },
     keywords: function() {
       if (this.currentPaper.keywords) {
-        return sortedUniq(this.currentPaper.keywords.split(","));
+        return sortedUniq(this.currentPaper.keywords.split(";"));
       } else {
         return ["Unknown"];
       }

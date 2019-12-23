@@ -18,6 +18,7 @@
       <el-table
         :data="items"
         stripe
+        max-height="470"
         highlight-current-row
         style="width: 100%"
         v-loading="loading"
@@ -31,11 +32,18 @@
           </template>
         </el-table-column>
         <el-table-column
+          label="Index"
+          align="center"
+          header-align="center"
+          type="index"
+          width="60"
+        ></el-table-column>
+        <el-table-column
           prop="title"
           label="Paper Title"
           min-width="500"
           align="left"
-          header-align="center"
+          header-align="left"
           sortable
         >
         </el-table-column>
@@ -51,14 +59,14 @@
         <el-table-column
           prop="journal"
           label="Journal"
-          width="150"
+          min-width="150"
           align="center"
           header-align="center"
           sortable
         >
         </el-table-column>
         <el-table-column
-          prop="published_date"
+          prop="pubdate"
           label="Published Date"
           width="150"
           align="center"

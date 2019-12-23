@@ -21,7 +21,7 @@
         <el-option label="Chinese" value="Chinese"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="Paper" prop="paper" v-if="newPaperMode">
+    <!-- <el-form-item label="Paper" prop="paper" v-if="newPaperMode">
       <el-select
         v-model="ruleForm.paper"
         multiple
@@ -40,7 +40,7 @@
         >
         </el-option>
       </el-select>
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item label="Tags" prop="tags">
       <el-input
         v-model="ruleForm.tags"
@@ -51,7 +51,7 @@
       <el-input
         type="textarea"
         v-model="ruleForm.content"
-        rows="10"
+        rows="8"
         placeholder="Please Enter Content for the Knowledge"
       ></el-input>
     </el-form-item>
@@ -73,7 +73,7 @@
 
 <script>
 import map from "lodash.map";
-import { mapActions, mapMutations, mapState } from "vuex";
+import { mapActions, mapMutations, mapState, mapGetters } from "vuex";
 
 export default {
   name: "KnowledgeForm",
@@ -81,6 +81,10 @@ export default {
     knowledge: {
       type: Object,
       required: false
+    },
+    paper: {
+      type: Number,
+      required: true
     }
   },
   data() {
@@ -130,7 +134,15 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$emit("close-knowledge-form");
+          this.$store
+            .dispatch("knowledges/addKnowledge", this.ruleForm)
+            .then(() => {
+              this.$message.success("Add knowledge successfully.");
+              this.$emit("close-knowledge-form");
+            })
+            .catch(() => {
+              this.$message.success("Oops, add knowledge error.");
+            });
         } else {
           return false;
         }
@@ -168,12 +180,17 @@ export default {
         };
       });
     },
+    ...mapGetters("user", ["user"]),
     ...mapState("papers", ["items", "loading", "total"])
   },
   created() {
     if (this.knowledge) {
       this.ruleForm = Object.assign(this.ruleForm, this.knowledge);
     }
+
+    this.ruleForm["paper"] = this.paper;
+    this.ruleForm["author"] = this.user.id;
+    this.ruleForm["liked_num"] = 0;
   }
 };
 </script>

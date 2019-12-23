@@ -1,4 +1,5 @@
 import MemberService from "@/services/member.service";
+import { httpError } from "@/services/utils";
 
 const members = {
   namespaced: true,
@@ -44,7 +45,7 @@ const members = {
           commit("setMemberList", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         })
         .finally(() => {
           commit("setLoading", false);
@@ -56,7 +57,7 @@ const members = {
           commit("addMember", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         });
     },
     updateMemberRole({ commit }, member) {
@@ -65,7 +66,7 @@ const members = {
           commit("updateMember", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         });
     },
     removeMember({ commit, state }, projectId) {
@@ -75,7 +76,7 @@ const members = {
             commit("deleteMember", member.id);
           })
           .catch(error => {
-            alert(error);
+            httpError(error);
           });
       }
       commit("resetSelected");

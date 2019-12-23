@@ -1,5 +1,6 @@
 import DocumentService from "@/services/document.service";
 import AnnotationService from "@/services/annotation.service";
+import { httpError } from "@/services/utils";
 
 const documents = {
   namespaced: true,
@@ -98,7 +99,7 @@ const documents = {
           commit("setTotalItems", response.data.count);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         })
         .finally(() => {
           commit("setLoading", false);
@@ -134,7 +135,7 @@ const documents = {
           link.click();
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         })
         .finally(() => {
           commit("setLoading", false);
@@ -146,7 +147,7 @@ const documents = {
           commit("updateDocument", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         });
     },
     deleteDocument({ commit, state }, projectId) {
@@ -156,7 +157,7 @@ const documents = {
             commit("deleteDocument", document.id);
           })
           .catch(error => {
-            alert(error);
+            httpError(error);
           });
       }
       commit("resetSelected");
@@ -168,7 +169,7 @@ const documents = {
           commit("addAnnotation", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         });
     },
     updateAnnotation({ commit, state }, payload) {
@@ -183,7 +184,7 @@ const documents = {
           commit("updateAnnotation", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         });
     },
     deleteAnnotation({ commit, state }, payload) {
@@ -197,7 +198,7 @@ const documents = {
           commit("deleteAnnotation", payload.annotationId);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         });
     },
     approve({ commit, getters }, payload) {
@@ -210,7 +211,7 @@ const documents = {
           commit("updateDocument", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         });
     }
   }

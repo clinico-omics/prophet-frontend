@@ -77,7 +77,7 @@
           </el-row>
           <el-row>
             <span><b>PublishedDate: </b></span>
-            <span>{{ currentPaper.published_date }}</span>
+            <span>{{ currentPaper.pubdate }}</span>
           </el-row>
           <el-row>
             <span><b>Author: </b></span>
@@ -98,6 +98,7 @@
     <el-row class="knowledge-creator" v-if="knowledgeCreatorActive">
       <knowledge-form
         :knowledge="currentVersion"
+        :paper="paper"
         @close-knowledge-form="closeForm"
       ></knowledge-form>
     </el-row>
@@ -152,6 +153,7 @@ export default {
   data() {
     return {
       version: "",
+      paper: 0,
       currentVersion: {},
       knowledgeActive: false,
       knowledgeCreatorActive: false
@@ -193,11 +195,14 @@ export default {
       const knowledge = find(this.items, function(o) {
         return o.language === language;
       });
-      if (knowledge) {
+
+      if (JSON.stringify(knowledge) !== "undefined") {
         this.currentVersion = knowledge;
       } else {
         this.currentVersion = {};
       }
+
+      this.paper = this.currentPaper.id;
       this.knowledgeCreatorActive = true;
     },
     closeForm: function() {
@@ -216,7 +221,11 @@ export default {
       this.knowledgeActive = false;
     },
     showPreview: function() {
-      this.knowledgeActive = true;
+      if (this.items.length > 0) {
+        this.knowledgeActive = true;
+      } else {
+        this.$message.warning("Oops, no knowledges, please add new knowledge.");
+      }
     },
     selectKnowledge: function(value) {
       this.setLoading(true);

@@ -1,4 +1,5 @@
 import ProjectService from "@/services/project.service";
+import { httpError } from "@/services/utils";
 
 const projects = {
   namespaced: true,
@@ -207,7 +208,7 @@ const projects = {
           commit("setProjectList", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         })
         .finally(() => {
           commit("setLoading", false);
@@ -219,7 +220,7 @@ const projects = {
           commit("createProject", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         });
     },
     updateProject({ commit }, data) {
@@ -228,7 +229,7 @@ const projects = {
           commit("updateProject", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         });
     },
     deleteProject({ commit, state }) {
@@ -238,7 +239,7 @@ const projects = {
             commit("deleteProject", project.id);
           })
           .catch(error => {
-            alert(error);
+            httpError(error);
           });
       }
       commit("resetSelected");
@@ -249,7 +250,7 @@ const projects = {
           commit("setCurrent", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         });
     },
     updateCurrentProject({ commit }, data) {
@@ -258,7 +259,7 @@ const projects = {
           commit("setCurrent", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         });
     }
   }

@@ -1,31 +1,31 @@
-import RoleService from "@/services/role.service";
+import UserService from "@/services/user.service";
 import { httpError } from "@/services/utils";
 
-const roles = {
+const user = {
   namespaced: true,
   state: () => ({
-    items: [],
+    userInfo: {},
     loading: false
   }),
   getters: {
-    roles(state) {
-      return state.items;
+    user(state) {
+      return state.userInfo;
     }
   },
   mutations: {
-    setRoleList(state, payload) {
-      state.items = payload;
+    setUserInfo(state, payload) {
+      state.userInfo = payload;
     },
     setLoading(state, payload) {
       state.loading = payload;
     }
   },
   actions: {
-    getRoleList({ commit }) {
+    getUser({ commit }) {
       commit("setLoading", true);
-      return RoleService.getRoleList()
+      return UserService.getMe()
         .then(response => {
-          commit("setRoleList", response.data);
+          commit("setUserInfo", response.data);
         })
         .catch(error => {
           httpError(error);
@@ -37,4 +37,4 @@ const roles = {
   }
 };
 
-export default roles;
+export default user;

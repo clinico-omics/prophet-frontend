@@ -1,4 +1,5 @@
 import LabelService from "@/services/label.service";
+import { httpError } from "@/services/utils";
 
 const labels = {
   namespaced: true,
@@ -44,7 +45,7 @@ const labels = {
           commit("setLabelList", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         })
         .finally(() => {
           commit("setLoading", false);
@@ -61,7 +62,7 @@ const labels = {
           commit("updateLabel", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         });
     },
     deleteLabel({ commit, state }, projectId) {
@@ -71,7 +72,7 @@ const labels = {
             commit("deleteLabel", label.id);
           })
           .catch(error => {
-            alert(error);
+            httpError(error);
           });
       }
       commit("resetSelected");
@@ -109,7 +110,7 @@ const labels = {
           link.click();
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         })
         .finally(() => {
           commit("setLoading", false);

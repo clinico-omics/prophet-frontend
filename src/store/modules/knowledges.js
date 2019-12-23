@@ -1,5 +1,5 @@
 import KnowledgeService from "@/services/knowledge.service";
-import { Notification } from "element-ui";
+import { httpError } from "@/services/utils";
 import orderBy from "lodash.orderby";
 
 const knowledges = {
@@ -88,15 +88,20 @@ const knowledges = {
           commit("setKnowledgeList", response.data.results);
           commit("setTotalItems", response.data.count);
         })
-        .catch(() => {
-          Notification.error({
-            title: "Unauthorized",
-            message: "Authorization failed. You need to login firstly.",
-            showClose: true
-          });
+        .catch(error => {
+          httpError(error);
         })
         .finally(() => {
           commit("setLoading", false);
+        });
+    },
+    addKnowledge({ commit }, data) {
+      return KnowledgeService.addKnowledge(data)
+        .then(response => {
+          commit("addKnowledge", response.data);
+        })
+        .catch(error => {
+          httpError(error);
         });
     },
     updateKnowledge({ commit }, data) {
@@ -105,7 +110,7 @@ const knowledges = {
           commit("updateKnowledge", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         });
     },
     deleteKnowledge({ commit, state }) {
@@ -115,7 +120,7 @@ const knowledges = {
             commit("deleteKnowledge", knowledge.id);
           })
           .catch(error => {
-            alert(error);
+            httpError(error);
           });
       }
       commit("resetSelected");
@@ -134,7 +139,7 @@ const knowledges = {
           commit("updateKnowledge", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         });
     }
   }

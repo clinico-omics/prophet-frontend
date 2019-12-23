@@ -136,13 +136,13 @@ const router = new Router({
 });
 
 const whiteList = [
-  '^[\/]+$',
-  '^[\/]+auth$',
-  '^[\/]+knowledge[/]?.*$',
-  '^[\/]+papers[/]?$',
-  '^[\/]+papers/.*-list$',
-  '^[\/]+daily[/]?.*$',
-  '^[\/]+about$'
+  "^[/]+$",
+  "^[/]+auth$",
+  "^[/]+knowledge[/]?.*$",
+  "^[/]+papers[/]?$",
+  "^[/]+papers/.*-list$",
+  "^[/]+daily[/]?.*$",
+  "^[/]+about$"
 ]; // no redirect whitelist
 
 function checkToken() {
@@ -175,6 +175,8 @@ router.beforeEach((to, from, next) => {
     const tokenIsValid = checkToken();
 
     if (tokenIsValid) {
+      // Several components need the author information
+      store.dispatch("user/getUser");
       next();
     } else {
       Notification.error({

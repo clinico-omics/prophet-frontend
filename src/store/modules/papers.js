@@ -1,5 +1,5 @@
 import PaperService from "@/services/paper.service";
-import { Notification } from "element-ui";
+import { httpError } from "@/services/utils";
 
 const papers = {
   namespaced: true,
@@ -87,12 +87,8 @@ const papers = {
           commit("setPaperList", response.data.results);
           commit("setTotalItems", response.data.count);
         })
-        .catch(() => {
-          Notification.error({
-            title: "Unauthorized",
-            message: "Authorization failed. You need to login firstly.",
-            showClose: true
-          });
+        .catch(error => {
+          httpError(error);
         })
         .finally(() => {
           commit("setLoading", false);
@@ -104,11 +100,7 @@ const papers = {
           commit("setPaper", response.data);
         })
         .catch(error => {
-          Notification.error({
-            title: "Error",
-            message: error,
-            showClose: true
-          });
+          httpError(error);
         });
     },
     updatePaper({ commit }, data) {
@@ -117,7 +109,7 @@ const papers = {
           commit("updatePaper", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         });
     },
     deletePaper({ commit, state }) {
@@ -127,7 +119,7 @@ const papers = {
             commit("deletePaper", paper.id);
           })
           .catch(error => {
-            alert(error);
+            httpError(error);
           });
       }
       commit("resetSelected");
@@ -146,7 +138,7 @@ const papers = {
           commit("updatePaper", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         });
     }
   }

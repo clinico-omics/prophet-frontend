@@ -17,6 +17,7 @@ import { mapActions, mapGetters } from "vuex";
 import BaseModal from "@/components/molecules/BaseModal";
 import MemberAdditionForm from "@/components/organisms/members/MemberAdditionForm";
 import UserService from "@/services/user.service";
+import { httpError } from "@/services/utils";
 
 export default {
   components: {
@@ -48,7 +49,7 @@ export default {
           this.items = response.data;
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         });
     }
   }

@@ -11,6 +11,7 @@ import members from "./modules/members";
 import pagination from "./modules/pagination";
 import projects from "./modules/projects";
 import roles from "./modules/roles";
+import user from "./modules/user";
 import statistics from "./modules/statistics";
 
 Vue.use(Vuex);
@@ -30,6 +31,7 @@ export default new Vuex.Store({
     pagination,
     projects,
     roles,
+    user,
     statistics
   },
   state: state,

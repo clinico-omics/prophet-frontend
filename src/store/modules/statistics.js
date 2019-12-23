@@ -1,4 +1,5 @@
 import StatisticsService from "@/services/statistics.service";
+import { httpError } from "@/services/utils";
 
 function makeData(object, label) {
   const labels = object ? Object.keys(object) : [];
@@ -59,7 +60,7 @@ const statistics = {
           commit("setStatistics", response.data);
         })
         .catch(error => {
-          alert(error);
+          httpError(error);
         })
         .finally(() => {
           commit("setLoading", false);
