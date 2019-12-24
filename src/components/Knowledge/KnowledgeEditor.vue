@@ -15,7 +15,7 @@
             type="primary"
             icon="el-icon-view"
             circle
-            @click="showPreview(currentPaper.id)"
+            @click="showPreview(currentPaper.pmid)"
           ></el-button>
         </el-tooltip>
         <el-tooltip
@@ -202,7 +202,7 @@ export default {
         this.currentVersion = {};
       }
 
-      this.paper = this.currentPaper.id;
+      this.paper = this.currentPaper.pmid;
       this.knowledgeCreatorActive = true;
     },
     closeForm: function() {

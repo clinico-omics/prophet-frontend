@@ -7,7 +7,7 @@ class PaperService {
 
   getPaperList({ limit, offset, q = "", isChecked = "", filterName = "" }) {
     return this.request.get(
-      `/papers?limit=${limit}&offset=${offset}&q=${q}&${filterName}=${isChecked}`
+      `/papers?limit=${limit}&offset=${offset}&q=${q}&ordering=-pmid&${filterName}=${isChecked}`
     );
   }
 

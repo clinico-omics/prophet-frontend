@@ -60,9 +60,7 @@ export default {
       return this.$store.state["settings"].website;
     }
   },
-  created: function() {
-    console.log(this.website, this.footerContent);
-  }
+  created: function() {}
 };
 </script>
 

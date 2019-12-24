@@ -176,7 +176,7 @@ export default {
       return map(this.items, item => {
         return {
           label: item.pmid + " | " + item.title,
-          value: item.id
+          value: item.pmid
         };
       });
     },

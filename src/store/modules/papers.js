@@ -47,13 +47,13 @@ const papers = {
       state.items.unshift(paper);
     },
     deletePaper(state, paperId) {
-      state.items = state.items.filter(item => item.id !== paperId);
+      state.items = state.items.filter(item => item.pmid !== paperId);
     },
     updateSelected(state, selected) {
       state.selected = selected;
     },
     updatePaper(state, paper) {
-      const item = state.items.find(item => item.id === paper.id);
+      const item = state.items.find(item => item.pmid === paper.pmid);
       Object.assign(item, paper);
     },
     resetSelected(state) {
@@ -114,9 +114,9 @@ const papers = {
     },
     deletePaper({ commit, state }) {
       for (const paper of state.selected) {
-        PaperService.deletePaper(paper.id)
+        PaperService.deletePaper(paper.pmid)
           .then(() => {
-            commit("deletePaper", paper.id);
+            commit("deletePaper", paper.pmid);
           })
           .catch(error => {
             httpError(error);
@@ -125,7 +125,7 @@ const papers = {
       commit("resetSelected");
     },
     approve({ commit, getters }) {
-      const paperId = getters.currentPaper.id;
+      const paperId = getters.currentPaper.pmid;
       var status = getters.currentPaper.status;
       if (status === "Submitted") {
         status = "Checked";
