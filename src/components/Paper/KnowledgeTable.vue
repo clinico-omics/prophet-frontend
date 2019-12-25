@@ -204,11 +204,8 @@ export default {
       });
       this.getKnowledgeList({});
     },
-    downloadPaper: function(source) {
-      window.open(source, "_blank");
-    },
     convertTags: function(tags) {
-      return sortedUniq(tags.split(","));
+      return sortedUniq(tags.split(";"));
     },
     showKnowledge: function(pmid) {
       this.$router.push({
@@ -236,6 +233,7 @@ export default {
     convertContent(content) {
       return content.replace(/([②③④⑤⑥⑦⑧⑨⑩])/g, "<br/><br/>$1");
     },
+    ...mapActions("papers", ["downloadPaper"]),
     ...mapActions("knowledges", ["getKnowledgeList"]),
     ...mapMutations("knowledges", ["updateSearchOptions"])
   },

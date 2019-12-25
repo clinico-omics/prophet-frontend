@@ -27,7 +27,14 @@
           <template slot-scope="props">
             <el-row v-html="props.row.abstract" class="abstract"></el-row>
             <el-row class="author-container">
-              {{ props.row.authors }}
+              <el-tag
+                style="margin-right: 5px;"
+                v-for="(author, index) in convertAuthors(props.row.authors)"
+                type="info"
+                :key="index"
+              >
+                {{ author }}
+              </el-tag>
             </el-row>
           </template>
         </el-table-column>
@@ -94,25 +101,38 @@
         <el-table-column
           fixed="right"
           label="Action"
-          width="260"
+          width="150"
           align="center"
           header-align="center"
         >
           <template slot-scope="scope">
-            <el-button
-              @click.native="downloadPaper(scope.row.doi)"
-              type="primary"
-              size="small"
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="Download Paper"
+              placement="top"
             >
-              Full Paper
-            </el-button>
-            <el-button
-              @click.native="sumbitKnowledge(scope.row.id)"
-              type="primary"
-              size="small"
+              <el-button
+                @click.native="downloadPaper(scope.row.doi)"
+                type="primary"
+                size="small"
+                icon="el-icon-download"
+              ></el-button>
+            </el-tooltip>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="Add Knowledge"
+              placement="top"
             >
-              Submit Knowledge
-            </el-button>
+              <el-button
+                @click.native="sumbitKnowledge(scope.row.id)"
+                type="primary"
+                size="small"
+                icon="el-icon-s-opportunity"
+              >
+              </el-button>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -131,6 +151,7 @@
 </template>
 
 <script>
+import sortedUniq from "lodash.sorteduniq";
 import { mapActions, mapState, mapMutations } from "vuex";
 
 export default {
@@ -166,9 +187,8 @@ export default {
       });
       this.getPaperList({});
     },
-    downloadPaper: function(doi) {
-      const source = "https://sci-hub.tw/" + doi;
-      window.open(source, "_blank");
+    convertAuthors: function(authors) {
+      return sortedUniq(authors.split(";"));
     },
     sumbitKnowledge: function(paperId) {
       this.$router.push({
@@ -178,7 +198,7 @@ export default {
         }
       });
     },
-    ...mapActions("papers", ["getPaperList"]),
+    ...mapActions("papers", ["getPaperList", "downloadPaper"]),
     ...mapMutations("papers", ["updateSearchOptions"])
   },
   computed: {

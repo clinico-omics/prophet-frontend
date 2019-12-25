@@ -1,5 +1,6 @@
 import PaperService from "@/services/paper.service";
 import { httpError } from "@/services/utils";
+import { Message } from "element-ui";
 
 const papers = {
   namespaced: true,
@@ -10,6 +11,7 @@ const papers = {
     current: 0,
     total: 0,
     paper: {},
+    baseUrl: "https://sci-hub.tw/",
     searchOptions: {
       limit: 10,
       offset: 0,
@@ -79,6 +81,14 @@ const papers = {
     }
   },
   actions: {
+    downloadPaper({ state }, doi) {
+      if (doi.length > 0) {
+        const source = state.baseUrl + doi;
+        window.open(source, "_blank");
+      } else {
+        Message.warning("Oops, can't found the full paper.");
+      }
+    },
     getPaperList({ commit, state }, payload) {
       commit("setLoading", true);
       payload = Object.assign(payload, state.searchOptions);

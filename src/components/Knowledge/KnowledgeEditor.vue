@@ -213,10 +213,6 @@ export default {
         name: "papers"
       });
     },
-    downloadPaper: function(doi) {
-      const source = "https://sci-hub.tw/" + doi;
-      window.open(source, "_blank");
-    },
     hidePreview: function() {
       this.knowledgeActive = false;
     },
@@ -234,7 +230,7 @@ export default {
         this.setLoading(false);
       }, 500);
     },
-    ...mapActions("papers", ["setCurrentPaper"]),
+    ...mapActions("papers", ["setCurrentPaper", "downloadPaper"]),
     ...mapActions("knowledges", ["getKnowledgeList"]),
     ...mapMutations("knowledges", ["setCurrent", "setLoading"])
   },

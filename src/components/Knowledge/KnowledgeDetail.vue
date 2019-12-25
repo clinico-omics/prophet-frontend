@@ -159,10 +159,6 @@ export default {
     };
   },
   methods: {
-    downloadPaper: function(doi) {
-      const source = "https://sci-hub.tw/" + doi;
-      window.open(source, "_blank");
-    },
     selectKnowledge: function(value) {
       this.setLoading(true);
       this.setCurrent(value);
@@ -170,7 +166,7 @@ export default {
         this.setLoading(false);
       }, 500);
     },
-    ...mapActions("papers", ["setCurrentPaper"]),
+    ...mapActions("papers", ["setCurrentPaper", "downloadPaper"]),
     ...mapActions("knowledges", ["getKnowledgeList"]),
     ...mapMutations("knowledges", ["setCurrent", "setLoading"])
   },

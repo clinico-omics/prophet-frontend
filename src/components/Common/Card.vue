@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     tags: function() {
-      return sortedUniq(this.card.tags.split(","));
+      return sortedUniq(this.card.tags.split(";"));
     },
     createdDate: function() {
       // 2019-12-20T05:15:28.400124Z --> 2019-12-20
