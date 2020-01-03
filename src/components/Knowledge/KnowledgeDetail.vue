@@ -10,13 +10,46 @@
           content="Sync to Annotation Tool"
           placement="top"
         >
-          <el-button
-            icon="el-icon-upload"
-            circle
-            disabled
-            type="warning"
-            @click.native="pushKnowledge(currentKnowledge)"
-          ></el-button>
+          <el-popover placement="right" width="500" trigger="click">
+            <el-table :data="filteredProject" v-loading="loading">
+              <el-table-column
+                width="150"
+                property="name"
+                label="Project Name"
+              ></el-table-column>
+              <el-table-column
+                width="300"
+                property="description"
+                label="Description"
+              ></el-table-column>
+              <el-table-column width="100" label="Status">
+                <template slot-scope="scope">
+                  <el-button type="success" size="small">
+                    fetchDocument({{ scope.row.id }})
+                  </el-button>
+                </template>
+              </el-table-column>
+              <el-table-column fixed="right" label="Action" width="80">
+                <template slot-scope="scope">
+                  <el-button
+                    @click="syncToProject(currentKnowledge, scope.row)"
+                    type="warning"
+                    size="small"
+                  >
+                    Sync
+                  </el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-button
+              icon="el-icon-upload"
+              circle
+              :disabled="disableSyncBtn"
+              @click.native="fetchProjects"
+              type="warning"
+              slot="reference"
+            ></el-button>
+          </el-popover>
         </el-tooltip>
         <el-tooltip class="item" content="Download Paper" placement="top">
           <el-button
@@ -79,7 +112,11 @@
         </el-row>
       </el-col>
       <el-col class="image" :xs="24" :sm="24" :md="24" :lg="13">
-        <img :src="currentKnowledge.image_src" />
+        <img
+          :src="currentKnowledge.image_src"
+          v-if="currentKnowledge.image_src"
+        />
+        <span>Comming Soon...</span>
       </el-col>
     </el-row>
     <el-row class="show-window">
@@ -89,16 +126,16 @@
           <el-row>{{ currentPaper.journal }}</el-row>
         </el-row>
         <el-row class="item">
+          <el-row class="title">PMID</el-row>
+          <el-row>{{ currentPaper.pmid }}</el-row>
+        </el-row>
+        <el-row class="item">
           <el-row class="title">Impact Factor</el-row>
           <el-row>{{ impactFactor }}</el-row>
         </el-row>
         <el-row class="item">
           <el-row class="title">Published Date</el-row>
           <el-row>{{ currentPaper.pubdate }}</el-row>
-        </el-row>
-        <el-row class="item">
-          <el-row class="title">Created Date</el-row>
-          <el-row>{{ createdDate }}</el-row>
         </el-row>
         <el-row class="item">
           <el-row class="title">Status</el-row>
@@ -134,7 +171,7 @@
       </el-col>
     </el-row>
     <el-row class="data-visulization" v-if="notShow">
-      <el-col class="summary" :xs="24" :sm="24" :md="24" :lg="5"> </el-col>
+      <el-col class="summary" :xs="24" :sm="24" :md="24" :lg="5"></el-col>
       <el-col :xs="24" :sm="24" :md="24" :lg="18" class="container"> </el-col>
     </el-row>
     <el-row class="recommendation" v-if="notShow">
@@ -147,6 +184,7 @@
 <script>
 import sortedUniq from "lodash.sorteduniq";
 import map from "lodash.map";
+import filter from "lodash.filter";
 import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
 
 export default {
@@ -166,8 +204,29 @@ export default {
         this.setLoading(false);
       }, 500);
     },
+    async syncToProject(currentKnowledge, currentProject) {
+      const data = {
+        reference_id: currentKnowledge.id,
+        reference_type: "Knowledge",
+        text: currentKnowledge.content,
+        meta: JSON.stringify(currentKnowledge)
+      };
+
+      const payload = {
+        projectId: currentProject.id,
+        refid: currentKnowledge.id,
+        reftype: "Knowledge"
+      };
+
+      await this.addOrUpdateDocument({ payload, data });
+    },
+    async fetchProjects() {
+      await this.getProjectList();
+    },
     ...mapActions("papers", ["setCurrentPaper", "downloadPaper"]),
+    ...mapActions("projects", ["getProjectList"]),
     ...mapActions("knowledges", ["getKnowledgeList"]),
+    ...mapActions("documents", ["addOrUpdateDocument", "getDocumentList"]),
     ...mapMutations("knowledges", ["setCurrent", "setLoading"])
   },
   mounted() {
@@ -176,10 +235,31 @@ export default {
     }
   },
   computed: {
+    disableSyncBtn: function() {
+      if (this.isLogined) {
+        return false;
+      } else {
+        return true;
+      }
+    },
     knowledgeVersions: function() {
       return map(this.items, item => {
         const language = item.language.toLowerCase();
         return item.pmid + " - " + item.owner + " - " + language;
+      });
+    },
+    loading: function() {
+      if (this.filteredProject.length == 0) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    filteredProject: function() {
+      return filter(this.projects, item => {
+        return (
+          item.users.includes(this.userInfo.id) || this.userInfo.is_superuser
+        );
       });
     },
     Knowledge: function() {
@@ -197,13 +277,6 @@ export default {
         return "Unknown";
       }
     },
-    createdDate: function() {
-      if (this.currentPaper.created_at) {
-        return this.currentPaper.created_at.slice(0, 10);
-      } else {
-        return "Unknown";
-      }
-    },
     keywords: function() {
       if (this.currentPaper.keywords) {
         return sortedUniq(this.currentPaper.keywords.split(";"));
@@ -213,7 +286,11 @@ export default {
     },
     ...mapGetters("papers", ["currentPaper"]),
     ...mapGetters("knowledges", ["currentKnowledge"]),
-    ...mapState("knowledges", ["items", "loading"])
+    ...mapState("knowledges", ["items", "loading"]),
+    ...mapState("projects", ["projects"]),
+    ...mapState("user", ["userInfo"]),
+    ...mapState("documents", ["total"]),
+    ...mapGetters("user", ["isLogined"])
   },
   watch: {},
   components: {},

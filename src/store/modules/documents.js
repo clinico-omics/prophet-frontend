@@ -1,6 +1,7 @@
 import DocumentService from "@/services/document.service";
 import AnnotationService from "@/services/annotation.service";
 import { httpError } from "@/services/utils";
+import { Message } from "element-ui";
 
 const documents = {
   namespaced: true,
@@ -105,6 +106,47 @@ const documents = {
           commit("setLoading", false);
         });
     },
+    addOrUpdateDocument({ commit, state, dispatch }, { payload, data }) {
+      // payload: projectId, refid, reftype
+      commit("setLoading", true);
+      payload = Object.assign(payload, state.searchOptions);
+      return DocumentService.getDocumentList(payload)
+        .then(response => {
+          const count = response.data.count;
+          const results = response.data.results;
+          if (count == 0) {
+            dispatch("addDocument", { payload, data });
+          } else {
+            const result = results[0];
+            const docId = result.id;
+            data = Object.assign(data, {
+              id: docId,
+              projectId: payload.projectId
+            });
+            dispatch("updateDocument", data);
+          }
+        })
+        .catch(error => {
+          httpError(error);
+        })
+        .finally(() => {
+          commit("setLoading", false);
+        });
+    },
+    addDocument({ commit }, { payload, data }) {
+      commit("setLoading", true);
+      return DocumentService.addDocument(payload.projectId, data)
+        .then(response => {
+          commit("addDocument", response.data);
+          Message.success("Sync to Annotation Tool Successfully.");
+        })
+        .catch(error => {
+          httpError(error);
+        })
+        .finally(() => {
+          commit("setLoading", false);
+        });
+    },
     uploadDocument({ commit, dispatch }, data) {
       commit("setLoading", true);
       const formData = new FormData();
@@ -142,12 +184,17 @@ const documents = {
         });
     },
     updateDocument({ commit }, data) {
+      commit("setLoading", true);
       DocumentService.updateDocument(data.projectId, data.id, data)
         .then(response => {
-          commit("updateDocument", response.data);
+          commit("setCurrent", response.data);
+          Message.success("Sync to Annotation Tool Successfully.");
         })
         .catch(error => {
           httpError(error);
+        })
+        .finally(() => {
+          commit("setLoading", false);
         });
     },
     deleteDocument({ commit, state }, projectId) {

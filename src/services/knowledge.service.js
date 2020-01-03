@@ -5,9 +5,16 @@ class KnowledgeService {
     this.request = ApiService;
   }
 
-  getKnowledgeList({ limit, offset, q = "", isChecked = "", filterName = "" }) {
+  getKnowledgeList({
+    limit,
+    offset,
+    q = "",
+    paper = "",
+    isChecked = "",
+    filterName = ""
+  }) {
     return this.request.get(
-      `/knowledges?limit=${limit}&offset=${offset}&q=${q}&${filterName}=${isChecked}`
+      `/knowledges?limit=${limit}&offset=${offset}&q=${q}&paper=${paper}&${filterName}=${isChecked}`
     );
   }
 

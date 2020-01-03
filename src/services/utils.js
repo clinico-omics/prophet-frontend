@@ -9,7 +9,7 @@ export const httpError = error => {
     if (response.status == 404) {
       title = "Error";
       message = "Not Found.";
-    } else if (response.status == 401) {
+    } else if (response.status == 401 || response.status == 403) {
       title = "Unauthorized";
       message = "Authorization failed. You need to login firstly.";
     }

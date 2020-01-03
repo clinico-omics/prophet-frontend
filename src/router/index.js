@@ -167,15 +167,16 @@ router.beforeEach((to, from, next) => {
 
   // Token will be not working When you refresh page.
   loadToken();
+  const tokenIsValid = checkToken();
 
   console.log("Matched: ", matched, to.path);
   if (matched.length > 0) {
+    if (tokenIsValid) {
+      store.dispatch("user/getUser");      
+    };
     next();
   } else {
-    const tokenIsValid = checkToken();
-
     if (tokenIsValid) {
-      // Several components need the author information
       store.dispatch("user/getUser");
       next();
     } else {
@@ -187,7 +188,7 @@ router.beforeEach((to, from, next) => {
       // 过期清理
       store.dispatch("auth/logout");
 
-      next({ path: from.path, query: { redirect: to.fullPath } });
+      next({ path: "/knowledge" });
     }
   }
 });

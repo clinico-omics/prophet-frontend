@@ -26,7 +26,7 @@
       {{ card.content }}
     </el-row>
     <el-row class="tag-container">
-      <span v-for="tag in tags" :key="tag">{{ tag }}</span>
+      <span v-for="tag in tags" :key="tag">{{ labelTag(tag) }}</span>
     </el-row>
     <el-row class="detail">
       <el-col :span="12" class="left">{{ card.owner || card.editor }}</el-col>
@@ -47,6 +47,15 @@ export default {
     journalMode: {
       required: false,
       default: true
+    }
+  },
+  methods: {
+    labelTag: function(tag) {
+      if (tag.length > 0) {
+        return tag;
+      } else {
+        return "No Tag";
+      }
     }
   },
   computed: {

@@ -38,6 +38,7 @@
 
 <script>
 import BaseCard from "@/components/Molecules/BaseCard";
+import { mapActions } from "vuex";
 
 export default {
   components: {
@@ -97,13 +98,15 @@ export default {
         })
           // eslint-disable-next-line no-unused-vars
           .then(result => {
-            this.$router.push("/");
+            this.getUser();
+            this.$router.go(-1);
           })
           .catch(() => {
             this.$message.error("Oops, invalid username or password.");
           });
       });
-    }
+    },
+    ...mapActions("user", ["getUser"])
   }
 };
 </script>

@@ -1,6 +1,7 @@
 import Cookie from "js-cookie";
 import ApiService from "@/services/api.service";
 import AuthService from "@/services/auth.service";
+import store from "@/store";
 
 const auth = {
   namespaced: true,
@@ -50,6 +51,7 @@ const auth = {
       ApiService.setHeader(token);
     },
     logout({ commit }) {
+      store.commit("user/setUserInfo", {});
       commit("clearToken");
       Cookie.remove("jwt");
       localStorage.removeItem("token");

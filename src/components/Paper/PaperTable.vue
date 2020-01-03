@@ -6,7 +6,7 @@
     <el-row class="paper-table" v-if="!mobileActive">
       <el-row class="search-bar">
         <el-input
-          placeholder="Please Enter PMID/DOI/Title"
+          placeholder="Please Enter PMID"
           v-model="queryString"
           clearable
           class="input-with-select"

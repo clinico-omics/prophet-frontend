@@ -5,6 +5,7 @@ import Vue from "vue";
 import VueI18n from "vue-i18n";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
+import "vue2-animate/dist/vue2-animate.min.css";
 import enLocale from "element-ui/lib/locale/lang/en";
 
 Vue.use(VueI18n);

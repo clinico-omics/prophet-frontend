@@ -9,7 +9,15 @@
     </prophet-header>
     <sidebar v-if="sidebarActive" :headerContent="headerContent"></sidebar>
     <el-row class="prophet">
-      <router-view name="contentMgmt"></router-view>
+      <transition
+        mode="out-in"
+        name="bounce"
+        :duration="{ enter: 500, leave: 300 }"
+        enter-active-class="animated fadeInUp"
+        leave-active-class="animated fadeOutUp"
+      >
+        <router-view name="contentMgmt"></router-view>
+      </transition>
     </el-row>
     <prophet-footer></prophet-footer>
   </div>

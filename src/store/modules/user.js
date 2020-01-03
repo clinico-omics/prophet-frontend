@@ -10,6 +10,13 @@ const user = {
   getters: {
     user(state) {
       return state.userInfo;
+    },
+    isLogined(state) {
+      if (JSON.stringify(state.userInfo) === JSON.stringify({})) {
+        return false;
+      } else {
+        return true;
+      }
     }
   },
   mutations: {

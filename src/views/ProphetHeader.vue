@@ -27,7 +27,10 @@
               class="item-container"
               :key="index"
             >
-              <el-menu-item :index="item.route" v-if="item.route">
+              <el-menu-item v-if="item.href">
+                <a :href="item.href" target="_blank">{{ item.name }}</a>
+              </el-menu-item>
+              <el-menu-item :index="item.route" v-if="item.route && !item.href">
                 <span>{{ item.name }}</span>
               </el-menu-item>
               <el-submenu :index="index.toString()" v-if="item.children">

@@ -11,10 +11,12 @@ class DocumentService {
     offset,
     q = "",
     isChecked = "",
-    filterName = ""
+    filterName = "",
+    refid = "",
+    reftype = ""
   }) {
     return this.request.get(
-      `/projects/${projectId}/docs?limit=${limit}&offset=${offset}&q=${q}&${filterName}=${isChecked}`
+      `/projects/${projectId}/docs?limit=${limit}&offset=${offset}&q=${q}&${filterName}=${isChecked}&refid=${refid}&reftype=${reftype}`
     );
   }
 
