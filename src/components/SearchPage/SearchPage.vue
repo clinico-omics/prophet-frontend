@@ -8,9 +8,11 @@
         <el-input
           placeholder="Search For Tumor Knowledge Points"
           v-model="queryString"
+          clearable
+          @keyup.enter.native="onSearch"
           class="input-with-select"
         >
-          <el-button slot="append">Search</el-button>
+          <el-button slot="append" @click="onSearch">Search</el-button>
         </el-input>
       </el-col>
     </el-row>
@@ -48,12 +50,22 @@
       <el-row class="not-found" v-else>
         <span>No any knowledges.</span>
       </el-row>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-sizes="[6, 12, 24, 30, 60]"
+        :page-size.sync="pageSize"
+        layout="total, sizes, prev, pager, next"
+        :total="total"
+      >
+      </el-pagination>
     </el-row>
   </el-row>
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapMutations } from "vuex";
 import Card from "../Common/Card";
 import sortedUniqBy from "lodash.sorteduniqby";
 
@@ -62,6 +74,8 @@ export default {
   props: {},
   data() {
     return {
+      currentPage: 1,
+      pageSize: 6,
       queryString: "",
       news: "<a href='http://datains.3steps.cn'>智汇医圈开启知识新模式</a>"
     };
@@ -75,7 +89,30 @@ export default {
         }
       });
     },
-    ...mapActions("knowledges", ["getKnowledgeList"])
+    onSearch: function() {
+      this.updateSearchOptions({
+        limit: this.limit,
+        offset: this.offset,
+        q: this.queryString
+      });
+      this.getKnowledgeList({});
+    },
+    handleSizeChange: function() {
+      this.updateSearchOptions({
+        limit: this.limit,
+        offset: this.offset
+      });
+      this.getKnowledgeList({});
+    },
+    handleCurrentChange: function() {
+      this.updateSearchOptions({
+        limit: this.limit,
+        offset: this.offset
+      });
+      this.getKnowledgeList({});
+    },
+    ...mapActions("knowledges", ["getKnowledgeList"]),
+    ...mapMutations("knowledges", ["updateSearchOptions"])
   },
   components: {
     Card
@@ -86,14 +123,26 @@ export default {
         return item.paper;
       });
     },
-    ...mapState("knowledges", ["items", "loading"])
+    offset: function() {
+      return (this.currentPage - 1) * this.pageSize;
+    },
+    limit: function() {
+      return this.pageSize;
+    },
+    ...mapState("knowledges", ["items", "loading", "total"])
   },
   created() {
-    this.getKnowledgeList({});
+    this.onSearch();
   }
 };
 </script>
 
 <style lang="less" scoped>
 @import "../../assets/css/search-page.less";
+</style>
+
+<style lang="less">
+.search-page > .show-window .el-input__inner {
+  height: 28px;
+}
 </style>

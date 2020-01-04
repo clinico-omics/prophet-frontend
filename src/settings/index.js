@@ -66,7 +66,7 @@ var config = {
       href: "http://prophet-backend.3steps.cn",
       route: "/annotation",
       show: true,
-      auth: false
+      auth: true
     }
     // {
     //   name: "About",
