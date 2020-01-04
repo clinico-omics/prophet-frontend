@@ -18,7 +18,6 @@
       <el-table
         :data="items"
         stripe
-        max-height="470"
         highlight-current-row
         style="width: 100%"
         v-loading="loading"

@@ -6,7 +6,7 @@
           Bridge the Gap Between Literature and Knowledge
         </el-row>
         <el-input
-          placeholder="Search For Tumor Knowledge Points"
+          placeholder="Search in Title/Journal/Status/Language Field"
           v-model="queryString"
           clearable
           @keyup.enter.native="onSearch"

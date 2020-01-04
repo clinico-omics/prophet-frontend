@@ -28,7 +28,9 @@ export default {
   min-height: 600px;
 
   .auth-login-form {
-    width: 500px;
+    width: 50%;
+    min-width: 300px;
+    max-width: 500px;
     height: 300px;
   }
 }

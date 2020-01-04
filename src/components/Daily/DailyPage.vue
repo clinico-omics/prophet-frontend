@@ -4,7 +4,7 @@
       <el-col :xs="20" :sm="20" :md="20" :lg="10">
         <el-row class="slogan">Learn Tumor Knowledges Every Day</el-row>
         <el-input
-          placeholder="Search For Tumor Knowledge By Topic"
+          placeholder="Search For Knowledge Points By Topic"
           v-model="queryString"
           class="input-with-select"
         >

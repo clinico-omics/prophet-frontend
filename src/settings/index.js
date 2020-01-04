@@ -182,7 +182,7 @@ var config = {
     },
     {
       title: "News",
-      span: 10,
+      span: 9,
       contentList: [
         {
           title: "接连获批，医疗AI诊断决策支持的春天即将到来？",

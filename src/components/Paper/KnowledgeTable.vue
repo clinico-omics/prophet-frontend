@@ -40,6 +40,13 @@
           </template>
         </el-table-column>
         <el-table-column
+          label="Index"
+          align="center"
+          header-align="center"
+          type="index"
+          width="60"
+        ></el-table-column>
+        <el-table-column
           prop="title"
           label="Knowledge Title"
           min-width="500"
@@ -147,7 +154,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
-        :page-sizes="[1, 10, 30, 50, 80, 100]"
+        :page-sizes="[10, 30, 50, 80, 100]"
         :page-size.sync="pageSize"
         layout="total, sizes, prev, pager, next"
         :total="total"
@@ -255,7 +262,7 @@ export default {
     } else {
       this.mobileActive = false;
     }
-    this.getKnowledgeList({});
+    this.onSearch();
   }
 };
 </script>

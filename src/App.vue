@@ -22,4 +22,9 @@ export default {
 <style lang="css">
 @import "./assets/css/normalized.css";
 @import "./assets/css/reset.css";
+
+body {
+  display: flex;
+  flex-direction: column;
+}
 </style>
