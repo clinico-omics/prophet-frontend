@@ -99,6 +99,7 @@
       <knowledge-form
         :knowledge="currentVersion"
         :paper="paper"
+        :language="language"
         @close-knowledge-form="closeForm"
       ></knowledge-form>
     </el-row>
@@ -154,6 +155,7 @@ export default {
     return {
       version: "",
       paper: 0,
+      language: "English",
       currentVersion: {},
       knowledgeActive: false,
       knowledgeCreatorActive: false
@@ -204,6 +206,7 @@ export default {
 
       this.paper = this.currentPaper.pmid;
       this.knowledgeCreatorActive = true;
+      this.language = language;
     },
     closeForm: function() {
       this.knowledgeCreatorActive = false;

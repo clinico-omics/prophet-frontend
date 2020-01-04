@@ -192,8 +192,7 @@ export default {
   props: {},
   data() {
     return {
-      notShow: false,
-      version: ""
+      notShow: false
     };
   },
   methods: {
@@ -229,12 +228,15 @@ export default {
     ...mapActions("documents", ["addOrUpdateDocument", "getDocumentList"]),
     ...mapMutations("knowledges", ["setCurrent", "setLoading"])
   },
-  mounted() {
-    if (this.knowledgeVersions.length > 0) {
-      this.version = this.knowledgeVersions[0];
-    }
-  },
+  mounted() {},
   computed: {
+    version: function() {
+      if (this.knowledgeVersions.length > 0) {
+        return this.knowledgeVersions[0];
+      } else {
+        return undefined;
+      }
+    },
     disableSyncBtn: function() {
       if (this.isLogined) {
         return false;

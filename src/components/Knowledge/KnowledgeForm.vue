@@ -85,6 +85,11 @@ export default {
     paper: {
       type: Number,
       required: true
+    },
+    language: {
+      type: String,
+      required: false,
+      default: "English"
     }
   },
   data() {
@@ -191,6 +196,7 @@ export default {
     this.ruleForm["paper"] = this.paper;
     this.ruleForm["author"] = this.user.id;
     this.ruleForm["liked_num"] = 0;
+    this.ruleForm["language"] = this.language;
   }
 };
 </script>
