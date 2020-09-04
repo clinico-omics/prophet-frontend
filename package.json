@@ -24,7 +24,7 @@
     "lodash.sortby": "^4.7.0",
     "lodash.sorteduniq": "^4.2.0",
     "lodash.sorteduniqby": "^4.7.0",
-    "papaparse": "^5.1.1",
+    "papaparse": "^5.2.0",
     "register-service-worker": "^1.6.2",
     "tui-editor": "^1.4.10",
     "vue": "^2.6.10",
